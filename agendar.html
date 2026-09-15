@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23070D1A%22%2F%3E%3Cg%20transform%3D%22translate(16%2016)%20scale(0.062)%20translate(-201%20-126)%22%3E%3Cpath%20d%3D%22M196.7%2011.5%20L205.4%2011.5%20L314.6%20240%20L261.7%20240%20L201%20104%20L140.4%20240%20L87.4%20240%20Z%22%20fill%3D%22%23F2F6FC%22%2F%3E%3Cellipse%20cx%3D%22193.1%22%20cy%3D%22137%22%20rx%3D%22191.8%22%20ry%3D%2246.7%22%20transform%3D%22rotate(-17.3%20193.1%20137)%22%20fill%3D%22none%22%20stroke%3D%22%23E0B45E%22%20stroke-width%3D%2213%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" type="image/svg+xml">
+<title>Agendar reunião — Astro Consórcios</title>
+<meta name="description" content="Escolha um horário e converse por vídeo com um especialista da Astro Consórcios sobre o seu consórcio.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://astroconsorcios.netlify.app/agendar.html">
+<script>
+/* Antes de qualquer pintura: sem isto a pagina nasce escura e pisca para o
+   claro assim que o script principal roda. Fica inline de proposito. */
+(function(){try{
+  var t=localStorage.getItem("astro-tema");
+  if(t==="claro"||t==="escuro") document.documentElement.setAttribute("data-tema",t);
+  var claro = t==="claro" || (t!=="escuro" && window.matchMedia("(prefers-color-scheme: light)").matches);
+  document.documentElement.classList.toggle("t-claro", claro);
+  document.documentElement.style.colorScheme = claro ? "light" : "dark";
+}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#03060F; --panel:#080F1D; --panel-2:#0B1526;
+  --accent:#3B8FE0; --accent-hi:#7FD4FF;
+  --accent-soft:rgba(59,143,224,.16); --accent-line:rgba(59,143,224,.34);
+  --ouro:#D9A94E; --verde:#2EDB70; --verde-txt:#4CC397;
+  --text:#F2F6FC; --text-2:#93A9C9; --text-3:#7C90B4;
+  --line:rgba(147,169,201,.16); --line-2:rgba(147,169,201,.6);
+  --f-display:'Sora',ui-sans-serif,system-ui,sans-serif;
+  --f-text:'Manrope',ui-sans-serif,system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --r:14px; --r-l:22px;
+}
+:root[data-tema="claro"], :root:not([data-tema="escuro"]).t-claro{
+  --canvas:#FFFFFF; --panel:#FFFFFF; --panel-2:#F7FAFF;
+  --accent:#0E56AE; --accent-hi:#0E4F9E;
+  --accent-soft:rgba(18,100,196,.08); --accent-line:rgba(18,100,196,.24);
+  --text:#0A1524; --text-2:#35465C; --text-3:#46586F;
+  --verde-txt:#0F7A55;
+  --line:rgba(10,21,36,.09); --line-2:rgba(10,21,36,.52);
+}
+*{ box-sizing:border-box }
+body{
+  margin:0; background:var(--canvas); color:var(--text);
+  font-family:var(--f-text); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:760px; margin:0 auto; padding:30px 20px 80px }
+
+header.topo{ display:flex; align-items:center; gap:14px; margin-bottom:34px }
+.marca{ display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--text) }
+.marca svg{ width:30px; height:30px; color:var(--accent-hi) }
+.marca b{ font-family:var(--f-display); font-size:17px; letter-spacing:-.01em }
+.voltar{ margin-left:auto; font-size:14px; color:var(--text-2); text-decoration:none }
+.voltar:hover{ color:var(--text) }
+
+h1{ font-family:var(--f-display); font-size:clamp(28px,4.4vw,40px); line-height:1.08;
+    letter-spacing:-.03em; margin:0 0 10px; text-wrap:balance }
+.lede{ color:var(--text-2); margin:0 0 6px; max-width:56ch }
+.fuso{ font-family:var(--f-mono); font-size:12.5px; color:var(--text-3); margin:0 0 26px }
+
+.passo{ font-family:var(--f-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+        color:var(--accent-hi); margin:30px 0 12px }
+.caixa{
+  background:var(--panel-2); border:1px solid var(--line); border-radius:var(--r-l);
+  padding:20px 22px;
+}
+.dias{ display:flex; gap:9px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin }
+.dia{
+  flex:none; min-width:78px; padding:11px 12px 12px; border-radius:var(--r); cursor:pointer;
+  background:transparent; border:1px solid var(--line-2); color:var(--text-2);
+  font-family:var(--f-text); text-align:center; transition:border-color .3s var(--ease), color .3s var(--ease);
+}
+.dia:hover{ border-color:var(--accent-line); color:var(--text) }
+.dia[aria-pressed="true"]{ border-color:var(--accent); background:var(--accent-soft); color:var(--text) }
+.dia .sem{ display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-3) }
+.dia .num{ display:block; font-family:var(--f-display); font-size:21px; line-height:1.2; margin-top:2px }
+.dia .mes{ display:block; font-size:11.5px; color:var(--text-3) }
+.dia[aria-pressed="true"] .sem, .dia[aria-pressed="true"] .mes{ color:var(--accent-hi) }
+
+.horas{ display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:9px; margin-top:4px }
+.hora{
+  padding:11px 8px; border-radius:100px; cursor:pointer; font-family:var(--f-mono); font-size:14px;
+  background:transparent; border:1px solid var(--line-2); color:var(--text-2);
+  transition:border-color .3s var(--ease), color .3s var(--ease);
+}
+.hora:hover{ border-color:var(--accent-line); color:var(--text) }
+.hora[aria-pressed="true"]{ border-color:var(--accent); background:var(--accent-soft); color:var(--text) }
+.hora small{ display:block; font-family:var(--f-text); font-size:11px; color:var(--text-3); margin-top:1px }
+
+label{ display:block; font-size:14px; color:var(--text-2); margin:0 0 6px }
+input, textarea{
+  width:100%; padding:13px 15px; border-radius:var(--r);
+  background:rgba(2,4,10,.4); border:1px solid rgba(147,169,201,.55);
+  color:var(--text); font-family:var(--f-text); font-size:16px;
+}
+:root[data-tema="claro"] input, :root[data-tema="claro"] textarea,
+:root:not([data-tema="escuro"]).t-claro input, :root:not([data-tema="escuro"]).t-claro textarea{
+  background:#F2F6FC; border-color:rgba(10,21,36,.52); color:#0A1524;
+}
+input::placeholder, textarea::placeholder{ color:var(--text-3) }
+input:focus, textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft) }
+textarea{ min-height:84px; resize:vertical }
+.campo + .campo{ margin-top:14px }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px; width:100%;
+  margin-top:18px; padding:15px 22px; border:none; border-radius:100px; cursor:pointer;
+  font-family:var(--f-text); font-size:16px; font-weight:700; color:#04101F;
+  background:linear-gradient(135deg,var(--accent-hi),var(--accent));
+  transition:filter .3s var(--ease), transform .2s var(--ease);
+}
+.btn:hover{ filter:brightness(1.07) } .btn:active{ transform:scale(.99) }
+.btn[disabled]{ opacity:.45; cursor:default; filter:none }
+:root[data-tema="claro"] .btn, :root:not([data-tema="escuro"]).t-claro .btn{ color:#fff }
+
+
+/* a saída para quem nenhum horário serve. Fica discreta de propósito: é uma
+   válvula, não uma alternativa em pé de igualdade com marcar. */
+.escape{ display:flex; align-items:center; justify-content:space-between; gap:14px;
+  flex-wrap:wrap; margin-top:12px; padding:14px 18px; border-radius:var(--r);
+  border:1px dashed var(--line-2); background:transparent }
+.escape p{ margin:0; font-size:14px; color:var(--text-2); flex:1; min-width:200px }
+.escape a{ display:inline-flex; align-items:center; gap:8px; flex:none;
+  padding:10px 16px; border-radius:100px; text-decoration:none; font-weight:700; font-size:14px;
+  color:var(--verde-txt); border:1px solid currentColor }
+.escape a:hover{ background:rgba(46,219,112,.08) }
+.escape a svg{ width:16px; height:16px; fill:currentColor }
+.aviso{ font-size:13px; color:var(--text-3); margin-top:14px; line-height:1.55 }
+.erro{ color:#E8825C; font-size:14px; margin-top:12px }
+:root[data-tema="claro"] .erro, :root:not([data-tema="escuro"]).t-claro .erro{ color:#B3492A }
+
+.wa{
+  display:inline-flex; align-items:center; gap:9px; margin-top:18px;
+  padding:13px 20px; border-radius:100px; text-decoration:none; font-weight:700; font-size:15px;
+  background:linear-gradient(150deg,#2EDB70,#1AA84F); color:#04140A;
+}
+.wa svg{ width:18px; height:18px; fill:currentColor }
+
+.ok-card{ text-align:center; padding:34px 24px }
+.ok-card .selo{
+  width:58px; height:58px; margin:0 auto 16px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(46,219,112,.14); color:var(--verde);
+}
+.ok-card .selo svg{ width:28px; height:28px }
+.ok-card h2{ font-family:var(--f-display); font-size:24px; margin:0 0 8px; letter-spacing:-.02em }
+.quando{
+  font-family:var(--f-mono); font-size:17px; color:var(--text); margin:16px 0 4px;
+}
+.sala{ display:block; margin-top:16px; font-size:14px; color:var(--accent-hi); word-break:break-all }
+.linha-fina{ height:1px; background:var(--line); margin:22px 0 }
+
+.vazio{ color:var(--text-3); font-size:15px; padding:8px 0 }
+.girando{ color:var(--text-3); font-size:15px }
+[hidden]{ display:none !important }
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
+
+/* ---------- a barra do topo, igual a das outras paginas ---------- */
+nav{
+  position:sticky; top:0; z-index:60;
+  height:74px; display:flex; align-items:center;
+  background:rgba(3,6,15,.9);
+  backdrop-filter:blur(16px) saturate(1.4); -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--line);
+}
+:root[data-tema="claro"] nav, :root:not([data-tema="escuro"]).t-claro nav{
+  background:rgba(255,255,255,.86);
+}
+.nav-inner{
+  width:100%; max-width:1180px; margin:0 auto; padding:0 20px;
+  display:flex; align-items:center; gap:20px;
+}
+.nav-logo{ height:44px; width:auto; display:inline-flex; align-items:center; gap:11px }
+.nav-cracha{ position:relative; flex:none; height:86%; aspect-ratio:400 / 252; }
+.nav-marca{ position:absolute; inset:0; width:100%; height:100%; display:block; color:#0B2149; visibility:hidden; }
+.nav-gira{
+  position:absolute; inset:0;
+  background-image:url('img/marca-estatica-prata.webp');
+  background-repeat:no-repeat; background-size:contain; background-position:center;
+}
+.nav-palavra{ height:66%; width:auto; display:block; flex:none }
+/* o PNG e branco: no claro vira azul-marinho, mesmo filtro do resto do site */
+:root[data-tema="claro"] .nav-gira, :root:not([data-tema="escuro"]).t-claro .nav-gira{
+  background-image:url('img/marca-estatica-navy.webp');
+}
+:root[data-tema="claro"] .nav-palavra, :root:not([data-tema="escuro"]).t-claro .nav-palavra{
+  filter:brightness(0) saturate(100%) invert(6%) sepia(30%) saturate(1800%) hue-rotate(186deg);
+}
+.nav-volta{
+  margin-left:auto; font-size:14.5px; font-weight:600; color:var(--text-2);
+  text-decoration:none; padding:8px 0;
+}
+.nav-volta:hover{ color:var(--text) }
+@media (max-width:640px){
+  nav{ height:62px }
+  .nav-logo{ height:36px }
+  .nav-inner{ padding:0 14px }
+}
+
+
+/* ==========================================================================
+   AVISO DE COOKIES
+   Barra no rodape. Enquanto esta aberta, ela SOBE os elementos fixos (o
+   WhatsApp, o Apollo, o voltar-ao-topo e a barra do celular) pela propria
+   altura, senao ela taparia justamente os botoes que convertem.
+   Depois da primeira escolha some para sempre.
+   ========================================================================== */
+.consent{
+  position:fixed; left:0; right:0; bottom:0; z-index:130;
+  display:flex; align-items:center; justify-content:center;
+  gap:20px; flex-wrap:wrap;
+  padding:15px 20px calc(15px + env(safe-area-inset-bottom, 0px));
+  background:rgba(3,6,15,.95);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border-top:1px solid var(--line);
+}
+/* o atributo hidden perde para o display:flex do autor. Foi assim que o
+   painel do Apollo ja nasceu visivel uma vez; aqui a regra vem junto. */
+.consent[hidden]{ display:none !important }
+
+.consent-txt{
+  flex:0 1 620px; margin:0; font-size:13.5px; line-height:1.6; color:var(--text-2);
+}
+.consent-txt a{ color:var(--accent); text-decoration:underline; text-underline-offset:2px }
+.consent-acoes{ display:flex; gap:10px; flex:0 0 auto }
+.consent-btn{
+  font:inherit; font-size:13.5px; font-weight:700; cursor:pointer;
+  padding:11px 22px; border-radius:999px; border:1px solid transparent;
+  transition:opacity .2s var(--ease, ease), background .2s var(--ease, ease);
+}
+.consent-btn:hover{ opacity:.86 }
+.consent-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:3px }
+/* fundo = cor do texto do tema, texto = cor da chapa: contraste maximo nos
+   dois temas sem depender de degrade de acento, que ja quebrou no claro */
+.consent-sim{ background:var(--text); color:#03060F }
+.consent-nao{ background:transparent; border-color:var(--line-2); color:var(--text) }
+
+/* Levanta por MARGEM, nunca por transform. A .mobile-cta se esconde com
+   transform:translateY(100%), e sobrescrever isso com !important prendia a
+   barra na tela em toda a pagina. Achado pelo autoteste, nao a olho. */
+html.consent-aberto .whatsapp-float,
+html.consent-aberto .ia-balao,
+html.consent-aberto .ao-topo{
+  margin-bottom:var(--consent-h, 0px);
+  transition:margin-bottom .25s ease;
+}
+/* a barra do celular so sobe quando esta de fato na tela: recolhida ela se
+   esconde com translateY(100%), que so alcanca o fim da tela se ela estiver
+   colada no rodape */
+html.consent-aberto .mobile-cta:not(.recolhido){
+  margin-bottom:var(--consent-h, 0px);
+  transition:margin-bottom .25s ease;
+}
+
+@media (max-width:640px){
+  .consent{ gap:11px; padding:13px 15px calc(13px + env(safe-area-inset-bottom, 0px)) }
+  .consent-txt{ flex:1 1 100%; font-size:12.8px }
+  .consent-acoes{ flex:1 1 100%; }
+  .consent-btn{ flex:1 1 0; padding:12px 10px }
+}
+
+:root[data-tema="claro"] .consent{ background:rgba(255,255,255,.96) }
+:root[data-tema="claro"] .consent-sim{ color:#FFFFFF }
+@media (prefers-color-scheme: light){
+  :root:not([data-tema="escuro"]) .consent{ background:rgba(255,255,255,.96) }
+  :root:not([data-tema="escuro"]) .consent-sim{ color:#FFFFFF }
+}
+
+/* ALVO DE TOQUE: o link do aviso de cookies tinha 18px de altura e o minimo
+   recomendado para o dedo e 24px. Cresce por padding, sem mudar a letra.
+   Mesma regra do index, copiada numero por numero. */
+.consent a, .consent-txt a{
+  display:inline-block; padding:4px 2px; min-height:24px; line-height:16px;
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="marcaAstro" viewBox="0 0 400 252">
+    <defs>
+        <linearGradient id="anelOuro" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#A8712C"/>
+          <stop offset="28%"  stop-color="#DCAF56"/>
+          <stop offset="52%"  stop-color="#F5DC9A"/>
+          <stop offset="78%"  stop-color="#CE9A4C"/>
+          <stop offset="100%" stop-color="#8A5A22"/>
+        </linearGradient>
+      </defs>
+      <path d="M196.74 11.5 L205.35 11.5 L314.57 240 L261.66 240 L200.95 103.96 L140.42 240 L87.42 240 Z" fill="currentColor"/>
+      <path d="M13.2 193L12.7 191.3L12.7 189.4L13 187.2L13.7 184.7L15 181.9L16.7 178.9L18.9 175.7L21.6 172.4L24.9 169L28.8 165.5L33.1 162L37.8 158.3L43 154.6L48.6 150.9L54.6 147L61 143.2L67.7 139.4L74.8 135.5L82.2 131.7L90 127.8L98 124L106.3 120.2L114.9 116.6L123.6 113L132.6 109.5L141.8 106L151 102.7L160.4 99.4L169.9 96.2L179.5 93.2L189.1 90.3L198.7 87.5L208.3 84.8L217.8 82.3L227.3 80L236.7 77.8L246 75.8L255.1 74L264.1 72.3L272.8 70.8L281.4 69.5L289.7 68.4L297.7 67.5L305.4 66.8L312.9 66.3L320 66L326.7 65.8L333.1 65.9L339.1 66.2L344.6 66.6L349.8 67.3L354.5 68.1L358.7 69.2L362.5 70.4L365.7 71.7L368.5 73.3L370.8 74.9L372.6 76.5L374.1 78.3L375.1 80.3L375.6 82.4L375.6 84.8L375.1 87.3L374.2 90L372.7 92.9L370.7 95.8L368.2 98.9L365.2 102.2L361.8 105.5L357.9 108.9L353.5 112.4L348.7 116L343.4 119.5L337.7 123.2L331.7 126.9L325.2 130.6L318.4 134.3L311.2 137.9L303.7 141.6L295.9 145.3L287.8 149L279.5 152.6L270.9 156.2L262.1 159.7L253.1 163.2L244 166.5L234.7 169.8L225.3 173.1L215.8 176.2L206.3 179.2L196.7 182.1L187.1 184.7L177.5 187.3L168 189.8L158.5 192.2L149.2 194.4L139.9 196.3L130.8 198L121.8 199.6L113.1 201L104.6 202.3L96.3 203.4L88.3 204.4L80.7 205.2L73.3 205.9L66.2 206.3L59.5 206.5L53.2 206.4L47.3 206.2L41.8 205.7L36.7 205.1L32.1 204.3L27.9 203.3L24.3 202.1L21.2 200.7L18.6 199.3L16.6 197.7L15.1 196.2L13.9 194.6L13.2 193Z M6.8 195L8 198L9.9 200.6L12.3 202.9L15.2 204.9L18.5 206.5L22.2 207.9L26.4 209.2L30.9 210.2L35.8 211.1L41.2 211.7L46.9 212.1L53.1 212.3L59.6 212.3L66.5 212.2L73.7 211.8L81.2 211.4L89 210.7L97.1 209.8L105.5 208.7L114.1 207.3L122.9 205.7L131.9 203.8L141.1 201.8L150.4 199.7L159.8 197.4L169.3 195.1L178.9 192.6L188.5 189.8L198.1 186.9L207.8 183.9L217.3 180.8L226.9 177.6L236.3 174.3L245.6 170.9L254.8 167.4L263.7 163.8L272.5 160.1L281.1 156.4L289.5 152.6L297.6 148.8L305.3 145L312.8 141.1L320 137.2L326.8 133.3L333.2 129.5L339.3 125.6L345 121.8L350.2 118.1L355 114.4L359.4 110.8L363.4 107.2L366.9 103.8L369.9 100.4L372.5 97.1L374.5 93.9L376.1 90.9L377.2 87.9L377.8 85L377.8 82.2L377.4 79.5L376.5 77L374.9 74.6L372.8 72.4L370.2 70.5L367.1 68.9L363.5 67.5L359.5 66.3L355 65.3L350.2 64.5L344.9 63.9L339.2 63.5L333.1 63.3L326.7 63.3L319.9 63.5L312.7 63.9L305.2 64.5L297.4 65.3L289.4 66.3L281.1 67.5L272.5 68.8L263.7 70.4L254.7 72.1L245.6 74L236.3 76.1L226.9 78.3L217.4 80.7L207.8 83.2L198.2 85.8L188.6 88.6L179 91.6L169.4 94.6L159.9 97.8L150.5 101.1L141.2 104.4L132 107.9L123 111.4L114.2 115L105.6 118.7L97.2 122.3L89.1 126L81.2 129.7L73.7 133.4L66.5 137.1L59.6 140.8L53.1 144.5L46.9 148.2L41.2 151.9L35.8 155.5L30.9 159.1L26.4 162.7L22.4 166.2L18.7 169.6L15.5 172.8L12.7 176L10.3 179.2L8.5 182.4L7.2 185.5L6.5 188.7L6.3 191.9L6.8 195Z" fill="url(#anelOuro)" fill-rule="evenodd"/>
+  </symbol>
+</svg>
+<nav>
+  <div class="nav-inner">
+    <a href="/" aria-label="Astro Consórcios, ir para a página inicial">
+      <span class="nav-logo">
+        <span class="nav-cracha" aria-hidden="true">
+          <svg class="nav-marca" viewBox="0 0 400 252" focusable="false"><use href="#marcaAstro"/></svg>
+          <span class="nav-gira"></span>
+        </span>
+        <img class="nav-palavra" src="img/astro-palavra.webp" width="612" height="250" decoding="async" alt="Astro Consórcios">
+      </span>
+    </a>
+    <a class="nav-volta" href="/">Voltar ao site</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  
+  <main id="conteudo">
+    <h1>Vamos conversar sobre o seu caso</h1>
+    <p class="lede">Reunião por vídeo, sem custo e sem compromisso. Escolha o horário que
+       couber na sua agenda.</p>
+    <p class="fuso" id="fuso"></p>
+
+    <div id="carregando" class="girando">Abrindo a agenda…</div>
+
+    <div id="indisponivel" hidden>
+      <div class="caixa">
+        <p style="margin:0 0 4px"><strong>A agenda ainda não está no ar.</strong></p>
+        <p style="margin:0; color:var(--text-2)">Fale com a gente no WhatsApp que marcamos na hora.</p>
+        <a class="wa" id="waFalha" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Z"/></svg>
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <form id="forma" hidden>
+      <p class="passo">1 · Escolha o dia</p>
+      <div class="caixa"><div class="dias" id="dias"></div></div>
+
+      <p class="passo">2 · Escolha o horário</p>
+      <div class="caixa"><div class="horas" id="horas"><p class="vazio">Escolha um dia acima.</p></div></div>
+      <div class="escape">
+        <p>Nenhum desses horários serve para você? A gente encaixa em outro.</p>
+        <a id="waEncaixe" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Z"/></svg>
+          Pedir outro horário
+        </a>
+      </div>
+
+      <p class="passo">3 · Seus dados</p>
+      <div class="caixa">
+        <div class="campo">
+          <label for="nome">Seu nome</label>
+          <input id="nome" name="nome" type="text" maxlength="80" autocomplete="name" required>
+        </div>
+        <div class="campo">
+          <label for="zap">WhatsApp com DDD</label>
+          <input id="zap" name="zap" type="tel" inputmode="tel" maxlength="20"
+                 autocomplete="tel" placeholder="45 99999-9999" required>
+        </div>
+        <div class="campo">
+          <label for="assunto">O que você quer conquistar? <span style="color:var(--text-3)">(opcional)</span></label>
+          <textarea id="assunto" name="assunto" maxlength="300"
+                    placeholder="Ex.: apartamento de uns 400 mil, sem pressa de receber"></textarea>
+        </div>
+        <button class="btn" id="enviar" type="submit" disabled>Confirmar reunião</button>
+        <p class="erro" id="erro" hidden></p>
+        <p class="aviso">Ao confirmar, você recebe o link da sala aqui na tela. Não cobramos nada
+           pela reunião e você pode desmarcar quando quiser pelo WhatsApp.</p>
+      </div>
+    </form>
+
+    <div id="pronto" hidden>
+      <div class="caixa ok-card">
+        <div class="selo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Reunião marcada</h2>
+        <p style="color:var(--text-2); margin:0">Anote aí, e nos vemos.</p>
+        <p class="quando" id="quando"></p>
+        <p class="fuso" id="quandoSP" style="margin:0"></p>
+        <div class="linha-fina"></div>
+        <p style="margin:0; color:var(--text-2); font-size:14px">Link da sala, no dia e hora:</p>
+        <a class="sala" id="sala" href="#" target="_blank" rel="noopener noreferrer"></a>
+        <div class="linha-fina"></div>
+        <p style="margin:0 0 2px; color:var(--text-2); font-size:14px">
+          Avise a gente pelo WhatsApp para confirmarmos do nosso lado:</p>
+        <a class="wa" id="waOk" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Z"/></svg>
+          Avisar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var WA = '5545999999999';
+  var API = '/.netlify/functions/agenda';
+  var estado = { dia:null, hora:null, dias:[], offset:'-03:00', duracao:45 };
+
+  var el = function(id){ return document.getElementById(id); };
+
+  /* mesmo disparador das outras paginas: sem "sim" no aviso de cookies,
+     nada e enviado para lugar nenhum */
+  function rastrear(evento, dados){
+    try { if (!window.AstroConsentimento || !window.AstroConsentimento.permitido()) return; }
+    catch(e){ return; }
+    try { if (typeof fbq === 'function') fbq('track', evento, dados || {}); } catch(e){}
+    try { if (typeof gtag === 'function') gtag('event', evento, dados || {}); } catch(e){}
+  }
+
+  var SEM = ['dom','seg','ter','qua','qui','sex','sáb'];
+  var MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+  /* o fuso do visitante importa de verdade aqui: a Astro atende brasileiro no
+     exterior, e mostrar so o horario de Brasilia faria alguem perder a reuniao */
+  var zonaLocal = '';
+  try { zonaLocal = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+
+  function instante(dia, hora){ return new Date(dia + 'T' + hora + ':00' + estado.offset); }
+  function mesmoFuso(){
+    try {
+      var o = -new Date().getTimezoneOffset();
+      return o === -180;   /* -03:00 */
+    } catch(e){ return true; }
+  }
+  function horaLocal(dia, hora){
+    var d = instante(dia, hora);
+    return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function pintaFuso(){
+    if (mesmoFuso()){
+      el('fuso').textContent = 'Horários no fuso de Brasília.';
+    } else {
+      el('fuso').textContent = 'Horários no SEU fuso' + (zonaLocal ? ' (' + zonaLocal + ')' : '') +
+        '. O de Brasília aparece embaixo de cada um.';
+    }
+  }
+
+  function linkWA(texto){
+    return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(texto);
+  }
+
+  function mostraFalha(msg){
+    el('carregando').hidden = true;
+    el('forma').hidden = true;
+    el('indisponivel').hidden = false;
+    if (msg) el('indisponivel').querySelector('strong').textContent = msg;
+    el('waFalha').href = linkWA('Olá! Quero marcar uma reunião sobre consórcio.');
+  }
+
+  el('waEncaixe').href = linkWA('Olá! Quero marcar uma reunião, mas nenhum dos ' +
+    'horários do site serve para mim. Consigo em outro dia ou horário?');
+  el('waEncaixe').addEventListener('click', function(){
+    rastrear('Contact', { origem:'encaixe-agenda' });
+  });
+
+  function pintaDias(){
+    var alvo = el('dias');
+    alvo.innerHTML = '';
+    estado.dias.forEach(function(d){
+      var data = instante(d.dia, d.horas[0]);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'dia';
+      b.setAttribute('aria-pressed', String(estado.dia === d.dia));
+      b.innerHTML = '<span class="sem">' + SEM[data.getDay()] + '</span>' +
+                    '<span class="num">' + data.getDate() + '</span>' +
+                    '<span class="mes">' + MES[data.getMonth()] + '</span>';
+      b.addEventListener('click', function(){
+        estado.dia = d.dia; estado.hora = null;
+        pintaDias(); pintaHoras(); confere();
+        rastrear('InitiateCheckout', { etapa:'dia', dia:d.dia });
+      });
+      alvo.appendChild(b);
+    });
+  }
+
+  function pintaHoras(){
+    var alvo = el('horas');
+    var d = estado.dias.filter(function(x){ return x.dia === estado.dia; })[0];
+    if (!d){ alvo.innerHTML = '<p class="vazio">Escolha um dia acima.</p>'; return; }
+    alvo.innerHTML = '';
+    d.horas.forEach(function(h){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'hora';
+      b.setAttribute('aria-pressed', String(estado.hora === h));
+      b.innerHTML = horaLocal(d.dia, h) + (mesmoFuso() ? '' : '<small>' + h + ' Brasília</small>');
+      b.addEventListener('click', function(){
+        estado.hora = h; pintaHoras(); confere();
+        rastrear('AddToCart', { etapa:'horario', dia:estado.dia, hora:h });
+      });
+      alvo.appendChild(b);
+    });
+  }
+
+  function confere(){
+    var nome = el('nome').value.trim();
+    var zap = el('zap').value.replace(/\D/g,'');
+    el('enviar').disabled = !(estado.dia && estado.hora && nome.length >= 2 && zap.length >= 10);
+  }
+  ['nome','zap'].forEach(function(id){ el(id).addEventListener('input', confere); });
+
+  el('forma').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var botao = el('enviar');
+    botao.disabled = true;
+    botao.textContent = 'Confirmando…';
+    el('erro').hidden = true;
+    try {
+      var r = await fetch(API, {
+        method:'POST', headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ acao:'marcar', dia:estado.dia, hora:estado.hora,
+          nome: el('nome').value.trim(), whatsapp: el('zap').value,
+          assunto: el('assunto').value.trim() })
+      });
+      var b = await r.json();
+      if (!b.ok){
+        el('erro').textContent = b.mensagem || 'Não consegui marcar. Tente outro horário.';
+        el('erro').hidden = false;
+        botao.textContent = 'Confirmar reunião';
+        /* o horario pode ter sido tomado enquanto ele preenchia: recarrega */
+        if (r.status === 409) carregar();
+        return;
+      }
+      rastrear('Schedule', { dia:estado.dia, hora:estado.hora });
+      pintaPronto(b.reserva);
+    } catch (err){
+      el('erro').textContent = 'A conexão falhou. Tente de novo, ou fale no WhatsApp.';
+      el('erro').hidden = false;
+      botao.textContent = 'Confirmar reunião';
+      botao.disabled = false;
+    }
+  });
+
+  function pintaPronto(res){
+    var d = instante(res.dia, res.hora);
+    var fmt = new Intl.DateTimeFormat('pt-BR', { weekday:'long', day:'numeric', month:'long',
+      hour:'2-digit', minute:'2-digit' });
+    el('forma').hidden = true;
+    el('pronto').hidden = false;
+    el('quando').textContent = fmt.format(d);
+    el('quandoSP').textContent = mesmoFuso() ? 'Horário de Brasília.'
+      : res.hora + ' em Brasília' + (zonaLocal ? ' · você está em ' + zonaLocal : '');
+    el('sala').href = res.sala;
+    el('sala').textContent = res.sala;
+    el('waOk').href = linkWA('Olá! Marquei uma reunião pelo site para ' +
+      fmt.format(d) + ' (' + res.hora + ' de Brasília). Meu nome é ' + res.nome + '.');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  async function carregar(){
+    try {
+      var r = await fetch(API + '?acao=horarios');
+      var b = await r.json();
+      if (!b.ok){ mostraFalha(b.mensagem); return; }
+      estado.dias = b.dias || [];
+      estado.offset = b.offset || '-03:00';
+      estado.duracao = b.duracao || 45;
+      if (!estado.dias.length){ mostraFalha('Nenhum horário livre nos próximos dias.'); return; }
+      if (!estado.dias.some(function(d){ return d.dia === estado.dia; })){ estado.dia = null; estado.hora = null; }
+      el('carregando').hidden = true;
+      el('forma').hidden = false;
+      pintaFuso(); pintaDias(); pintaHoras(); confere();
+    } catch (e){ mostraFalha(); }
+  }
+
+  carregar();
+})();
+</script>
+
+<div class="consent" id="consent" role="region" aria-label="Aviso de cookies" hidden>
+  <p class="consent-txt">Usamos cookies para medir como o site é usado e, quando houver,
+    mensurar nossos anúncios. Você pode recusar sem perder nada do site.
+    <a href="/privacidade.html">Como tratamos seus dados</a>.</p>
+  <div class="consent-acoes">
+    <button class="consent-btn consent-nao" type="button" id="consentNao">Recusar</button>
+    <button class="consent-btn consent-sim" type="button" id="consentSim">Aceitar</button>
+  </div>
+</div>
+<script>
+/* Consentimento. Nada de medicao acontece sem um "sim" explicito. */
+(function(){
+  "use strict";
+  var CHAVE = 'astro-consentimento';
+  function lido(){ try { return localStorage.getItem(CHAVE); } catch(e){ return null; } }
+  function grava(v){ try { localStorage.setItem(CHAVE, v); } catch(e){} }
+
+  window.AstroConsentimento = {
+    permitido: function(){ return lido() === 'sim'; },
+    escolha: lido
+  };
+
+  /* PONTO UNICO onde a medicao entra no ar. O Google Analytics e o Pixel da
+     Meta devem ser ligados AQUI DENTRO, e nunca no <head>: no head eles
+     rodariam antes da pessoa escolher. Enquanto nao houver ID, nao faz nada. */
+  window.AstroMedicao = { ligar: function(){ /* IDs entram aqui */ } };
+
+  var caixa = document.getElementById('consent');
+  if (!caixa) return;
+  var raiz = document.documentElement;
+
+  function fecha(){
+    caixa.hidden = true;
+    raiz.classList.remove('consent-aberto');
+    raiz.style.removeProperty('--consent-h');
+  }
+
+  if (lido()){
+    if (lido() === 'sim') window.AstroMedicao.ligar();
+    return;
+  }
+
+  caixa.hidden = false;
+  raiz.classList.add('consent-aberto');
+  function mede(){ raiz.style.setProperty('--consent-h', caixa.offsetHeight + 'px'); }
+  mede();
+  window.addEventListener('resize', mede);
+
+  document.getElementById('consentSim').addEventListener('click', function(){
+    grava('sim'); fecha(); window.AstroMedicao.ligar();
+  });
+  document.getElementById('consentNao').addEventListener('click', function(){
+    grava('nao'); fecha();
+  });
+})();
+</script>
+</body>
+</html>

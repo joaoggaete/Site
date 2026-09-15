@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Página não encontrada — Astro Consórcios</title>
+<meta name="description" content="A página que você procura não existe ou mudou de endereço. Volte ao início da Astro Consórcios ou fale com a gente pelo WhatsApp.">
+<link rel="canonical" href="https://astroconsorcios.netlify.app/404.html">
+<meta name="robots" content="noindex, follow">
+<meta name="robots" content="noindex">
+<script>
+/* Antes de qualquer pintura: sem isto a pagina nasce escura e pisca para o
+   claro assim que o script principal roda. Fica inline de proposito. */
+(function(){try{
+  var t=localStorage.getItem("astro-tema");
+  if(t==="claro"||t==="escuro") document.documentElement.setAttribute("data-tema",t);
+  var claro = t==="claro" || (t!=="escuro" && window.matchMedia("(prefers-color-scheme: light)").matches);
+  document.documentElement.classList.toggle("t-claro", claro);
+  document.documentElement.style.colorScheme = claro ? "light" : "dark";
+}catch(e){}})();
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,'Times New Roman',serif;background:#fff;color:#1A1A2E;
+display:flex;align-items:center;justify-content:center;min-height:100vh;padding:30px;text-align:center}
+.wrap{max-width:520px}
+.code{font-family:Arial,sans-serif;font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#13254E;font-weight:700;margin-bottom:18px}
+h1{font-size:38px;line-height:1.2;margin-bottom:16px;color:#13254E}
+p{font-family:Arial,sans-serif;font-size:16px;color:#6B6B85;line-height:1.6;margin-bottom:32px}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+a{font-family:Arial,sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+font-size:15px;text-decoration:none;padding:16px 30px;border-radius:8px;display:inline-block}
+.primary{background:#13254E;color:#fff}
+.ghost{background:#F2F4F7;color:#13254E;border:1px solid rgba(19,37,78,.14)}
+
+/* ALVO DE TOQUE: o link do aviso de cookies tinha 18px de altura e o minimo
+   recomendado para o dedo e 24px. Cresce por padding, sem mudar a letra.
+   Mesma regra do index, copiada numero por numero. */
+.consent a, .consent-txt a{
+  display:inline-block; padding:4px 2px; min-height:24px; line-height:16px;
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23070D1A%22%2F%3E%3Cg%20transform%3D%22translate(16%2016)%20scale(0.062)%20translate(-201%20-126)%22%3E%3Cpath%20d%3D%22M196.7%2011.5%20L205.4%2011.5%20L314.6%20240%20L261.7%20240%20L201%20104%20L140.4%20240%20L87.4%20240%20Z%22%20fill%3D%22%23F2F6FC%22%2F%3E%3Cellipse%20cx%3D%22193.1%22%20cy%3D%22137%22%20rx%3D%22191.8%22%20ry%3D%2246.7%22%20transform%3D%22rotate(-17.3%20193.1%20137)%22%20fill%3D%22none%22%20stroke%3D%22%23E0B45E%22%20stroke-width%3D%2213%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   ALINHAMENTO COM A HOME
+   Página simples: mesma paleta, mesmo trio de fontes, sem vidro nem fluxo.
+   ========================================================================== */
+:root{
+  --canvas:#03060F; --accent:#3B8FE0; --accent-hi:#7FD4FF; --caramelo:#C8873B;
+  --text:#F2F6FC; --text-2:#93A9C9; --text-3:#7C90B4; --line:rgba(147,169,201,.14);
+}
+html,body{ background:#03060F !important; color:#F2F6FC !important }
+body{ font-family:'Manrope', ui-sans-serif, system-ui, sans-serif !important; -webkit-font-smoothing:antialiased }
+body::before{
+  content:""; position:fixed; inset:-20%; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(46% 38% at 20% 12%, rgba(59,143,224,.1), transparent 68%),
+    radial-gradient(40% 34% at 84% 78%, rgba(20,53,107,.22), transparent 70%);
+}
+body > *{ position:relative; z-index:1 }
+h1,h2,h3{ font-family:'Sora', ui-sans-serif, system-ui, sans-serif !important;
+  color:#F2F6FC !important; letter-spacing:-.028em; font-weight:700 }
+p,li,td,th,div{ color:#93A9C9 }
+strong,b{ color:#DCEBFA }
+a{ color:#7FD4FF }
+.eyebrow{
+  font-family:'JetBrains Mono', ui-monospace, monospace !important;
+  font-size:11px !important; letter-spacing:.2em !important; text-transform:uppercase;
+  color:#7FD4FF !important;
+}
+.sub,.code{ color:#7C90B4 !important }
+.box{
+  background:linear-gradient(154deg, rgba(255,255,255,.055), rgba(255,255,255,.014)) !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+  border-left:3px solid #3B8FE0 !important;
+  border-radius:14px !important; color:#93A9C9 !important;
+}
+.back,.ghost,.primary{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-weight:700 !important; border-radius:100px !important; border:none !important;
+  padding:13px 24px !important; text-decoration:none !important;
+}
+.primary{ background:linear-gradient(135deg,#7FD4FF,#3B8FE0) !important; color:#04101F !important;
+  box-shadow:0 0 0 1px rgba(190,235,255,.5), 0 8px 26px rgba(59,143,224,.3) !important }
+.back,.ghost{ background:rgba(147,169,201,.06) !important; color:#F2F6FC !important;
+  box-shadow:0 0 0 1px rgba(174,200,232,.32) !important }
+hr,.wrap > hr{ border-color:rgba(147,169,201,.14) !important }
+:focus-visible{ outline:2px solid #7FD4FF; outline-offset:3px }
+
+/* ==========================================================================
+   TEMA CLARO CONDICIONAL
+   Duas copias da mesma folha, geradas de uma fonte so:
+     1. quando a pessoa escolhe claro no botao;
+     2. quando o sistema dela pede claro e ela nao escolheu nada.
+   O escuro segue sendo o padrao do arquivo, entao nao precisa de bloco.
+   ========================================================================== */
+
+/* ---------- 1. escolha explicita ---------- */
+
+/* ==========================================================================
+   ESTUDO DE TEMA CLARO, v2
+   Branco de verdade, nao cinza. A regra que muda tudo: no escuro o vidro
+   existe porque EMITE luz na borda; no branco ele existe porque PROJETA
+   sombra e porque o que passa atras dele tem cor. Por isso a fita continua,
+   e continua colorida: sem ela, vidro branco sobre branco vira retangulo.
+   ========================================================================== */
+:root[data-tema="claro"]{
+  --canvas:#FFFFFF; --canvas-2:#FAFCFF; --panel:#FFFFFF; --panel-2:#F7FAFF; --panel-3:#FFFFFFCC;
+  --accent:#0E56AE; --accent-hi:#0A4288; --accent-deep:#E4EFFC;
+  --accent-soft:rgba(18,100,196,.08); --accent-line:rgba(18,100,196,.24);
+  --ouro:#7A5520; --ouro-luz:#96682A; --ouro-fundo:#5E4113; --caramelo:#8A6222;
+  --bronze:#774E1D; --bronze-luz:#7A5320; --alerta:#8A5A22;
+  --text:#0A1524; --text-2:#35465C; --text-3:#46586F;
+  --line:rgba(10,21,36,.09); --line-2:rgba(10,21,36,.14);
+}
+
+/* !important porque as paginas internas cravam o fundo escuro com
+   !important na propria folha antiga delas */
+:root[data-tema="claro"]{ background:#FFFFFF !important; color-scheme:light }
+
+:root[data-tema="claro"] body{
+  color:var(--text);
+  background:
+    radial-gradient(58% 40% at 4% 10%,  rgba(18,100,196,.055), transparent 66%),
+    radial-gradient(46% 34% at 98% 34%, rgba(14,79,158,.04), transparent 64%),
+    radial-gradient(52% 34% at 20% 74%, rgba(138,98,34,.03), transparent 62%),
+    radial-gradient(44% 30% at 90% 92%, rgba(18,100,196,.04), transparent 64%),
+    #FFFFFF !important;
+}
+
+/* A FITA: multiply sobre branco devolve a propria cor dela. Era o cinza do
+   fundo anterior que a sujava, nao o modo de mesclagem. */
+:root[data-tema="claro"] #fluxo{
+  /* nada de multiply nem de invert: agora o canvas ja sai transparente
+     com a fita em pigmento escuro, entao ele so precisa ser desenhado. */
+  filter:saturate(1.25) contrast(1.04) !important;
+  mix-blend-mode:normal !important;
+  opacity:var(--fluxo-op,.72) !important;
+}
+
+:root[data-tema="claro"] .ambiente{ opacity:.72 !important }
+
+/* O VIDRO: separa por sombra projetada, aro fino escuro, e o azul da fita
+   aparecendo borrado atraves dele. Vidro claro do iOS: menos brilho, mais
+   profundidade. */
+:root[data-tema="claro"] .vidro,
+:root[data-tema="claro"] .modal-card,
+:root[data-tema="claro"] .pagina-card,
+:root[data-tema="claro"] .atend-card,
+:root[data-tema="claro"] .faq-item,
+:root[data-tema="claro"] .comp-card,
+:root[data-tema="claro"] .stats-inner,
+:root[data-tema="claro"] .video-card{
+  background-image:
+    linear-gradient(154deg, rgba(255,255,255,.78), rgba(255,255,255,.56) 48%, rgba(232,242,255,.66)) !important;
+  backdrop-filter:blur(26px) saturate(190%) brightness(1.02) !important;
+  -webkit-backdrop-filter:blur(26px) saturate(190%) brightness(1.02) !important;
+  border:none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(18,100,196,.07),
+    0 1px 2px rgba(10,21,36,.05),
+    0 10px 26px rgba(10,21,36,.07),
+    0 30px 64px rgba(10,21,36,.07) !important;
+}
+
+:root[data-tema="claro"] .vidro::before,
+:root[data-tema="claro"] .modal-card::before,
+:root[data-tema="claro"] .pagina-card::before,
+:root[data-tema="claro"] .atend-card::before,
+:root[data-tema="claro"] .faq-item::before,
+:root[data-tema="claro"] .comp-card::before,
+:root[data-tema="claro"] .video-card::before{
+  background:linear-gradient(150deg,
+    rgba(255,255,255,1) 0%, rgba(10,21,36,.055) 40%,
+    rgba(10,21,36,.08) 68%, rgba(18,100,196,.2) 100%) !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+
+:root[data-tema="claro"] .vidro::after,
+:root[data-tema="claro"] .modal-card::after,
+:root[data-tema="claro"] .pagina-card::after,
+:root[data-tema="claro"] .atend-card::after,
+:root[data-tema="claro"] .faq-item::after,
+:root[data-tema="claro"] .comp-card::after,
+:root[data-tema="claro"] .video-card::after{
+  background:
+    radial-gradient(126% 64% at var(--lx) var(--ly), rgba(255,255,255,.75), transparent 56%),
+    linear-gradient(198deg, rgba(255,255,255,.5) 0%, transparent 24%) !important;
+}
+
+:root[data-tema="claro"] .modal-card:hover,
+:root[data-tema="claro"] .pagina-card:hover,
+:root[data-tema="claro"] .atend-card:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(18,100,196,.1),
+    0 2px 5px rgba(10,21,36,.06),
+    0 20px 44px rgba(10,21,36,.1),
+    0 44px 88px rgba(10,21,36,.08) !important;
+}
+
+:root[data-tema="claro"] nav{ background:rgba(255,255,255,.62) !important; border-bottom-color:transparent }
+
+:root[data-tema="claro"] nav.solida{ background:rgba(255,255,255,.86) !important; border-bottom-color:var(--line) }
+
+:root[data-tema="claro"] .nav-logo{ filter:brightness(0) saturate(100%) invert(6%) sepia(30%) saturate(1800%) hue-rotate(186deg) }
+
+:root[data-tema="claro"] footer .nav-logo{ filter:none }
+
+/* cores cravadas fora dos tokens: quem escreveu #BFD2E8 em vez de
+   var(--text-2) fixou "claro sobre escuro" no codigo. */
+:root[data-tema="claro"] .nav-links a{ color:#35465C }
+
+:root[data-tema="claro"] .nav-links a:hover{ color:var(--text) }
+
+:root[data-tema="claro"] .hero-sub{ color:#2C3D52 }
+
+:root[data-tema="claro"] .hero-microcopy,
+:root[data-tema="claro"] .hero-microcopy *{ color:#2C3D52 !important }
+
+:root[data-tema="claro"] .hero-microcopy strong,
+:root[data-tema="claro"] .hero-microcopy b{ color:var(--text) !important }
+
+:root[data-tema="claro"] .hero-microcopy::before{
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.86) 13%,
+             rgba(255,255,255,.86) 87%, rgba(255,255,255,0)) !important;
+}
+
+:root[data-tema="claro"] .hero-tit,
+:root[data-tema="claro"] .section-title,
+:root[data-tema="claro"] .comp-fecho strong{ color:var(--text) }
+
+:root[data-tema="claro"] .marca{ color:var(--accent) }
+
+:root[data-tema="claro"] .hero-fluxo::after{
+  background:linear-gradient(101deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.5) 26%,
+    rgba(255,255,255,.02) 56%, rgba(255,255,255,.18) 84%, rgba(255,255,255,.46) 100%) !important;
+}
+
+:root[data-tema="claro"] .btn-primario{
+  background:linear-gradient(135deg,#2079D6,#0E4F9E); color:#fff;
+  box-shadow:0 1px 2px rgba(10,21,36,.12), 0 8px 22px rgba(18,100,196,.26);
+}
+
+:root[data-tema="claro"] .btn-fantasma,
+:root[data-tema="claro"] .nav-cta,
+:root[data-tema="claro"] .nav-burger,
+:root[data-tema="claro"] .btn-wa-vidro,
+:root[data-tema="claro"] .ao-topo{
+  background:rgba(255,255,255,.66) !important; color:var(--text) !important;
+  backdrop-filter:blur(20px) saturate(170%) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(170%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(10,21,36,.06),
+             0 8px 20px rgba(10,21,36,.08) !important;
+}
+
+:root[data-tema="claro"] .btn-fantasma::before,
+:root[data-tema="claro"] .nav-cta::before,
+:root[data-tema="claro"] .nav-burger::before,
+:root[data-tema="claro"] .btn-wa-vidro::before{
+  background:linear-gradient(150deg, rgba(255,255,255,1), rgba(10,21,36,.09) 58%, rgba(18,100,196,.18)) !important;
+}
+
+:root[data-tema="claro"] .nav-burger span{ background:var(--text) }
+
+:root[data-tema="claro"] footer{ background:#0A1524; color:#E8EEF7 }
+
+:root[data-tema="claro"] footer a,
+:root[data-tema="claro"] footer p,
+:root[data-tema="claro"] footer h3,
+:root[data-tema="claro"] footer strong,
+:root[data-tema="claro"] footer li{ color:#E8EEF7 }
+
+:root[data-tema="claro"] footer .marca{ color:#7FD4FF }
+
+:root[data-tema="claro"] .aviso-construcao{ background:rgba(138,98,34,.07); color:#6B4C15; border-bottom-color:rgba(138,98,34,.2) }
+
+:root[data-tema="claro"] .aviso-construcao span{ color:rgba(107,76,21,.86) !important }
+
+:root[data-tema="claro"] .grao{ opacity:.025; mix-blend-mode:multiply }
+
+:root[data-tema="claro"] .brilho{
+  background-image:linear-gradient(to right,
+    #5E4113 0%, #8A6222 12.5%, #C69A45 32.5%, #A87D2C 50%,
+    #8A6222 67.5%, #5E4113 87.5%, #5E4113 100%) !important;
+}
+
+:root[data-tema="claro"] .regua,
+:root[data-tema="claro"] .calc-barras .b-trilho{ background:rgba(10,21,36,.055) }
+
+:root[data-tema="claro"] .regua-num{ color:var(--text) }
+
+:root[data-tema="claro"] .regua-lab,
+:root[data-tema="claro"] .b-lab{ color:var(--text-3) }
+
+:root[data-tema="claro"] .pill,
+:root[data-tema="claro"] .badge,
+:root[data-tema="claro"] .pagina-tag,
+:root[data-tema="claro"] .modal-card .eyebrow{
+  background:rgba(18,100,196,.06); border-color:rgba(18,100,196,.18);
+}
+
+:root[data-tema="claro"] .comp-bom{ box-shadow:inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(18,100,196,.1),
+  0 20px 48px rgba(18,100,196,.12), 0 0 0 1px rgba(18,100,196,.14) !important }
+
+
+/* ---------- gradientes de texto cravados em tons claros ---------- */
+/* .section-title span usa um degrade #DCF1FF a #7FD4FF recortado no texto.
+   Sobre branco ele desaparece. No claro o realce vira azul de tinta. */
+:root[data-tema="claro"] .section-title span{
+  background-image:linear-gradient(100deg,#1B6FCC,#0E4F9E 44%,#154E93) !important;
+}
+
+:root[data-tema="claro"] .eyebrow{ color:#0E4F9E !important }
+
+:root[data-tema="claro"] .eyebrow::before{ background:#1264C4 !important }
+
+/* a fita ganha corpo: no branco ela precisa de mais presenca para o vidro
+   ter o que refratar */
+/* No escuro a fita CLAREIA o fundo e o texto claro segue legivel. No branco
+   ela ESCURECE, e vira concorrente direta do texto. Por isso ela entra aqui
+   com menos da metade da forca: 0,45 do valor que a rolagem calcula. */
+:root[data-tema="claro"] #fluxo{ opacity:calc(var(--fluxo-op,.5) * .45) !important; filter:saturate(1.5) contrast(1.04) !important }
+
+:root[data-tema="claro"] .ambiente{ opacity:.9 !important }
+
+
+/* ---------- todo texto que ainda era claro ---------- */
+/* Levantados varrendo o DOM por luminancia, nao um a um: cinco familias de
+   degrade recortado no texto, todas nascidas para brilhar sobre o escuro. */
+:root[data-tema="claro"] .calc-valor,
+:root[data-tema="claro"] .stat-num{
+  background-image:linear-gradient(102deg,#0A1524,#123A6B 46%,#0E4F9E) !important;
+}
+
+:root[data-tema="claro"] .calc-economia strong,
+:root[data-tema="claro"] .destaque strong,
+:root[data-tema="claro"] strong.brilho{
+  background-image:linear-gradient(100deg,#0A1524,#123A6B 50%,#0E4F9E) !important;
+}
+
+:root[data-tema="claro"] strong.marca,
+:root[data-tema="claro"] .marca,
+:root[data-tema="claro"] b.marca{ color:#0E4F9E !important }
+
+:root[data-tema="claro"] .aviso-assembleia b,
+:root[data-tema="claro"] .aviso-assembleia strong{ color:#0E4F9E !important }
+
+:root[data-tema="claro"] b{ color:inherit }
+
+:root[data-tema="claro"] .calc-economia b,
+:root[data-tema="claro"] .hero-tit b{ color:var(--ouro) !important }
+
+/* o dourado do titulo media 2,97:1 contra 3,0 exigido: escurece um passo */
+:root[data-tema="claro"] .brilho{
+  background-image:linear-gradient(to right,
+    #4A330E 0%, #6E4D18 12.5%, #A87D2C 32.5%, #8A6222 50%,
+    #6E4D18 67.5%, #4A330E 87.5%, #4A330E 100%) !important;
+}
+
+
+/* ---------- o halo por tras dos titulos ---------- */
+/* Uma elipse escura desenhada atras de cada abertura de secao, para o titulo
+   se destacar da fita no tema escuro. Sobre branco ela vira mancha cinza, e
+   era a origem das quatro reprovacoes de contraste que sobravam. */
+:root[data-tema="claro"] .sec-head::before,
+:root[data-tema="claro"] .section-title::before{
+  background:radial-gradient(ellipse 60% 100% at 50% 50%, rgba(255,255,255,.92) 0%,
+    rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 78%) !important;
+}
+
+/* sombra de texto tambem era para fundo escuro */
+:root[data-tema="claro"] .section-title,
+:root[data-tema="claro"] .hero-tit{ text-shadow:none !important }
+
+
+/* o rotulo de 11px do comparativo herdava o bronze e o azul claro do tema
+   escuro; nesse tamanho, sobre branco, os dois reprovam */
+:root[data-tema="claro"] .comp-ruim .comp-tag{ color:#6B461A }
+
+:root[data-tema="claro"] .comp-bom .comp-tag{ color:#0A4288 }
+
+
+/* ---------- o comparativo: preservar a INTENCAO, nao a cor ---------- */
+/* No escuro o consorcio e quase branco com halo ciano e domina a tela; o
+   financiamento e bronze e recua. No claro, traduzir cor por cor invertia
+   isso: o bronze escuro pesava mais que o azul claro, e a opcao que o site
+   critica passava a mandar na secao. Aqui o consorcio volta a ser o mais
+   forte, agora por profundidade em vez de brilho. */
+:root[data-tema="claro"] .comp-bom .comp-total strong{ color:#08346B !important; text-shadow:none !important }
+
+:root[data-tema="claro"] .comp-bom .comp-linha strong{ color:#0B4283 !important }
+
+:root[data-tema="claro"] .comp-bom{ border-color:rgba(14,86,174,.4) !important }
+
+:root[data-tema="claro"] .comp-ruim .comp-total strong{ color:#8A6236 !important }
+
+:root[data-tema="claro"] .comp-ruim .comp-linha strong{ color:#6E5430 !important }
+
+
+/* ---------- sombras que existiam para descolar o texto do escuro ---------- */
+/* Eram halos PRETOS por baixo do texto claro. Sobre branco viram sujeira.
+   A funcao (separar o texto da fita) continua valendo, entao viram halo branco. */
+:root[data-tema="claro"] .eyebrow,
+:root[data-tema="claro"] .selo,
+:root[data-tema="claro"] .section-sub,
+:root[data-tema="claro"] .marca,
+:root[data-tema="claro"] .hero-sub,
+:root[data-tema="claro"] .hero-microcopy{
+  text-shadow:0 1px 2px rgba(255,255,255,.9), 0 0 10px rgba(255,255,255,.7) !important;
+}
+
+:root[data-tema="claro"] .section-title,
+:root[data-tema="claro"] .hero-tit,
+:root[data-tema="claro"] .calc-valor,
+:root[data-tema="claro"] .stat-num,
+:root[data-tema="claro"] .brilho{ text-shadow:none !important }
+
+/* ---------- 2. preferencia do sistema, sem escolha explicita ---------- */
+@media (prefers-color-scheme: light){
+
+/* ==========================================================================
+   ESTUDO DE TEMA CLARO, v2
+   Branco de verdade, nao cinza. A regra que muda tudo: no escuro o vidro
+   existe porque EMITE luz na borda; no branco ele existe porque PROJETA
+   sombra e porque o que passa atras dele tem cor. Por isso a fita continua,
+   e continua colorida: sem ela, vidro branco sobre branco vira retangulo.
+   ========================================================================== */
+:root:not([data-tema="escuro"]){
+  --canvas:#FFFFFF; --canvas-2:#FAFCFF; --panel:#FFFFFF; --panel-2:#F7FAFF; --panel-3:#FFFFFFCC;
+  --accent:#0E56AE; --accent-hi:#0A4288; --accent-deep:#E4EFFC;
+  --accent-soft:rgba(18,100,196,.08); --accent-line:rgba(18,100,196,.24);
+  --ouro:#7A5520; --ouro-luz:#96682A; --ouro-fundo:#5E4113; --caramelo:#8A6222;
+  --bronze:#774E1D; --bronze-luz:#7A5320; --alerta:#8A5A22;
+  --text:#0A1524; --text-2:#35465C; --text-3:#46586F;
+  --line:rgba(10,21,36,.09); --line-2:rgba(10,21,36,.14);
+}
+
+/* !important porque as paginas internas cravam o fundo escuro com
+   !important na propria folha antiga delas */
+:root:not([data-tema="escuro"]){ background:#FFFFFF !important; color-scheme:light }
+
+:root:not([data-tema="escuro"]) body{
+  color:var(--text);
+  background:
+    radial-gradient(58% 40% at 4% 10%,  rgba(18,100,196,.055), transparent 66%),
+    radial-gradient(46% 34% at 98% 34%, rgba(14,79,158,.04), transparent 64%),
+    radial-gradient(52% 34% at 20% 74%, rgba(138,98,34,.03), transparent 62%),
+    radial-gradient(44% 30% at 90% 92%, rgba(18,100,196,.04), transparent 64%),
+    #FFFFFF !important;
+}
+
+/* A FITA: multiply sobre branco devolve a propria cor dela. Era o cinza do
+   fundo anterior que a sujava, nao o modo de mesclagem. */
+:root:not([data-tema="escuro"]) #fluxo{
+  /* nada de multiply nem de invert: agora o canvas ja sai transparente
+     com a fita em pigmento escuro, entao ele so precisa ser desenhado. */
+  filter:saturate(1.25) contrast(1.04) !important;
+  mix-blend-mode:normal !important;
+  opacity:var(--fluxo-op,.72) !important;
+}
+
+:root:not([data-tema="escuro"]) .ambiente{ opacity:.72 !important }
+
+/* O VIDRO: separa por sombra projetada, aro fino escuro, e o azul da fita
+   aparecendo borrado atraves dele. Vidro claro do iOS: menos brilho, mais
+   profundidade. */
+:root:not([data-tema="escuro"]) .vidro,
+:root:not([data-tema="escuro"]) .modal-card,
+:root:not([data-tema="escuro"]) .pagina-card,
+:root:not([data-tema="escuro"]) .atend-card,
+:root:not([data-tema="escuro"]) .faq-item,
+:root:not([data-tema="escuro"]) .comp-card,
+:root:not([data-tema="escuro"]) .stats-inner,
+:root:not([data-tema="escuro"]) .video-card{
+  background-image:
+    linear-gradient(154deg, rgba(255,255,255,.78), rgba(255,255,255,.56) 48%, rgba(232,242,255,.66)) !important;
+  backdrop-filter:blur(26px) saturate(190%) brightness(1.02) !important;
+  -webkit-backdrop-filter:blur(26px) saturate(190%) brightness(1.02) !important;
+  border:none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(18,100,196,.07),
+    0 1px 2px rgba(10,21,36,.05),
+    0 10px 26px rgba(10,21,36,.07),
+    0 30px 64px rgba(10,21,36,.07) !important;
+}
+
+:root:not([data-tema="escuro"]) .vidro::before,
+:root:not([data-tema="escuro"]) .modal-card::before,
+:root:not([data-tema="escuro"]) .pagina-card::before,
+:root:not([data-tema="escuro"]) .atend-card::before,
+:root:not([data-tema="escuro"]) .faq-item::before,
+:root:not([data-tema="escuro"]) .comp-card::before,
+:root:not([data-tema="escuro"]) .video-card::before{
+  background:linear-gradient(150deg,
+    rgba(255,255,255,1) 0%, rgba(10,21,36,.055) 40%,
+    rgba(10,21,36,.08) 68%, rgba(18,100,196,.2) 100%) !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+
+:root:not([data-tema="escuro"]) .vidro::after,
+:root:not([data-tema="escuro"]) .modal-card::after,
+:root:not([data-tema="escuro"]) .pagina-card::after,
+:root:not([data-tema="escuro"]) .atend-card::after,
+:root:not([data-tema="escuro"]) .faq-item::after,
+:root:not([data-tema="escuro"]) .comp-card::after,
+:root:not([data-tema="escuro"]) .video-card::after{
+  background:
+    radial-gradient(126% 64% at var(--lx) var(--ly), rgba(255,255,255,.75), transparent 56%),
+    linear-gradient(198deg, rgba(255,255,255,.5) 0%, transparent 24%) !important;
+}
+
+:root:not([data-tema="escuro"]) .modal-card:hover,
+:root:not([data-tema="escuro"]) .pagina-card:hover,
+:root:not([data-tema="escuro"]) .atend-card:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(18,100,196,.1),
+    0 2px 5px rgba(10,21,36,.06),
+    0 20px 44px rgba(10,21,36,.1),
+    0 44px 88px rgba(10,21,36,.08) !important;
+}
+
+:root:not([data-tema="escuro"]) nav{ background:rgba(255,255,255,.62) !important; border-bottom-color:transparent }
+
+:root:not([data-tema="escuro"]) nav.solida{ background:rgba(255,255,255,.86) !important; border-bottom-color:var(--line) }
+
+:root:not([data-tema="escuro"]) .nav-logo{ filter:brightness(0) saturate(100%) invert(6%) sepia(30%) saturate(1800%) hue-rotate(186deg) }
+
+:root:not([data-tema="escuro"]) footer .nav-logo{ filter:none }
+
+/* cores cravadas fora dos tokens: quem escreveu #BFD2E8 em vez de
+   var(--text-2) fixou "claro sobre escuro" no codigo. */
+:root:not([data-tema="escuro"]) .nav-links a{ color:#35465C }
+
+:root:not([data-tema="escuro"]) .nav-links a:hover{ color:var(--text) }
+
+:root:not([data-tema="escuro"]) .hero-sub{ color:#2C3D52 }
+
+:root:not([data-tema="escuro"]) .hero-microcopy,
+:root:not([data-tema="escuro"]) .hero-microcopy *{ color:#2C3D52 !important }
+
+:root:not([data-tema="escuro"]) .hero-microcopy strong,
+:root:not([data-tema="escuro"]) .hero-microcopy b{ color:var(--text) !important }
+
+:root:not([data-tema="escuro"]) .hero-microcopy::before{
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.86) 13%,
+             rgba(255,255,255,.86) 87%, rgba(255,255,255,0)) !important;
+}
+
+:root:not([data-tema="escuro"]) .hero-tit,
+:root:not([data-tema="escuro"]) .section-title,
+:root:not([data-tema="escuro"]) .comp-fecho strong{ color:var(--text) }
+
+:root:not([data-tema="escuro"]) .marca{ color:var(--accent) }
+
+:root:not([data-tema="escuro"]) .hero-fluxo::after{
+  background:linear-gradient(101deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.5) 26%,
+    rgba(255,255,255,.02) 56%, rgba(255,255,255,.18) 84%, rgba(255,255,255,.46) 100%) !important;
+}
+
+:root:not([data-tema="escuro"]) .btn-primario{
+  background:linear-gradient(135deg,#2079D6,#0E4F9E); color:#fff;
+  box-shadow:0 1px 2px rgba(10,21,36,.12), 0 8px 22px rgba(18,100,196,.26);
+}
+
+:root:not([data-tema="escuro"]) .btn-fantasma,
+:root:not([data-tema="escuro"]) .nav-cta,
+:root:not([data-tema="escuro"]) .nav-burger,
+:root:not([data-tema="escuro"]) .btn-wa-vidro,
+:root:not([data-tema="escuro"]) .ao-topo{
+  background:rgba(255,255,255,.66) !important; color:var(--text) !important;
+  backdrop-filter:blur(20px) saturate(170%) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(170%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(10,21,36,.06),
+             0 8px 20px rgba(10,21,36,.08) !important;
+}
+
+:root:not([data-tema="escuro"]) .btn-fantasma::before,
+:root:not([data-tema="escuro"]) .nav-cta::before,
+:root:not([data-tema="escuro"]) .nav-burger::before,
+:root:not([data-tema="escuro"]) .btn-wa-vidro::before{
+  background:linear-gradient(150deg, rgba(255,255,255,1), rgba(10,21,36,.09) 58%, rgba(18,100,196,.18)) !important;
+}
+
+:root:not([data-tema="escuro"]) .nav-burger span{ background:var(--text) }
+
+:root:not([data-tema="escuro"]) footer{ background:#0A1524; color:#E8EEF7 }
+
+:root:not([data-tema="escuro"]) footer a,
+:root:not([data-tema="escuro"]) footer p,
+:root:not([data-tema="escuro"]) footer h3,
+:root:not([data-tema="escuro"]) footer strong,
+:root:not([data-tema="escuro"]) footer li{ color:#E8EEF7 }
+
+:root:not([data-tema="escuro"]) footer .marca{ color:#7FD4FF }
+
+:root:not([data-tema="escuro"]) .aviso-construcao{ background:rgba(138,98,34,.07); color:#6B4C15; border-bottom-color:rgba(138,98,34,.2) }
+
+:root:not([data-tema="escuro"]) .aviso-construcao span{ color:rgba(107,76,21,.86) !important }
+
+:root:not([data-tema="escuro"]) .grao{ opacity:.025; mix-blend-mode:multiply }
+
+:root:not([data-tema="escuro"]) .brilho{
+  background-image:linear-gradient(to right,
+    #5E4113 0%, #8A6222 12.5%, #C69A45 32.5%, #A87D2C 50%,
+    #8A6222 67.5%, #5E4113 87.5%, #5E4113 100%) !important;
+}
+
+:root:not([data-tema="escuro"]) .regua,
+:root:not([data-tema="escuro"]) .calc-barras .b-trilho{ background:rgba(10,21,36,.055) }
+
+:root:not([data-tema="escuro"]) .regua-num{ color:var(--text) }
+
+:root:not([data-tema="escuro"]) .regua-lab,
+:root:not([data-tema="escuro"]) .b-lab{ color:var(--text-3) }
+
+:root:not([data-tema="escuro"]) .pill,
+:root:not([data-tema="escuro"]) .badge,
+:root:not([data-tema="escuro"]) .pagina-tag,
+:root:not([data-tema="escuro"]) .modal-card .eyebrow{
+  background:rgba(18,100,196,.06); border-color:rgba(18,100,196,.18);
+}
+
+:root:not([data-tema="escuro"]) .comp-bom{ box-shadow:inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(18,100,196,.1),
+  0 20px 48px rgba(18,100,196,.12), 0 0 0 1px rgba(18,100,196,.14) !important }
+
+
+/* ---------- gradientes de texto cravados em tons claros ---------- */
+/* .section-title span usa um degrade #DCF1FF a #7FD4FF recortado no texto.
+   Sobre branco ele desaparece. No claro o realce vira azul de tinta. */
+:root:not([data-tema="escuro"]) .section-title span{
+  background-image:linear-gradient(100deg,#1B6FCC,#0E4F9E 44%,#154E93) !important;
+}
+
+:root:not([data-tema="escuro"]) .eyebrow{ color:#0E4F9E !important }
+
+:root:not([data-tema="escuro"]) .eyebrow::before{ background:#1264C4 !important }
+
+/* a fita ganha corpo: no branco ela precisa de mais presenca para o vidro
+   ter o que refratar */
+/* No escuro a fita CLAREIA o fundo e o texto claro segue legivel. No branco
+   ela ESCURECE, e vira concorrente direta do texto. Por isso ela entra aqui
+   com menos da metade da forca: 0,45 do valor que a rolagem calcula. */
+:root:not([data-tema="escuro"]) #fluxo{ opacity:calc(var(--fluxo-op,.5) * .45) !important; filter:saturate(1.5) contrast(1.04) !important }
+
+:root:not([data-tema="escuro"]) .ambiente{ opacity:.9 !important }
+
+
+/* ---------- todo texto que ainda era claro ---------- */
+/* Levantados varrendo o DOM por luminancia, nao um a um: cinco familias de
+   degrade recortado no texto, todas nascidas para brilhar sobre o escuro. */
+:root:not([data-tema="escuro"]) .calc-valor,
+:root:not([data-tema="escuro"]) .stat-num{
+  background-image:linear-gradient(102deg,#0A1524,#123A6B 46%,#0E4F9E) !important;
+}
+
+:root:not([data-tema="escuro"]) .calc-economia strong,
+:root:not([data-tema="escuro"]) .destaque strong,
+:root:not([data-tema="escuro"]) strong.brilho{
+  background-image:linear-gradient(100deg,#0A1524,#123A6B 50%,#0E4F9E) !important;
+}
+
+:root:not([data-tema="escuro"]) strong.marca,
+:root:not([data-tema="escuro"]) .marca,
+:root:not([data-tema="escuro"]) b.marca{ color:#0E4F9E !important }
+
+:root:not([data-tema="escuro"]) .aviso-assembleia b,
+:root:not([data-tema="escuro"]) .aviso-assembleia strong{ color:#0E4F9E !important }
+
+:root:not([data-tema="escuro"]) b{ color:inherit }
+
+:root:not([data-tema="escuro"]) .calc-economia b,
+:root:not([data-tema="escuro"]) .hero-tit b{ color:var(--ouro) !important }
+
+/* o dourado do titulo media 2,97:1 contra 3,0 exigido: escurece um passo */
+:root:not([data-tema="escuro"]) .brilho{
+  background-image:linear-gradient(to right,
+    #4A330E 0%, #6E4D18 12.5%, #A87D2C 32.5%, #8A6222 50%,
+    #6E4D18 67.5%, #4A330E 87.5%, #4A330E 100%) !important;
+}
+
+
+/* ---------- o halo por tras dos titulos ---------- */
+/* Uma elipse escura desenhada atras de cada abertura de secao, para o titulo
+   se destacar da fita no tema escuro. Sobre branco ela vira mancha cinza, e
+   era a origem das quatro reprovacoes de contraste que sobravam. */
+:root:not([data-tema="escuro"]) .sec-head::before,
+:root:not([data-tema="escuro"]) .section-title::before{
+  background:radial-gradient(ellipse 60% 100% at 50% 50%, rgba(255,255,255,.92) 0%,
+    rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 78%) !important;
+}
+
+/* sombra de texto tambem era para fundo escuro */
+:root:not([data-tema="escuro"]) .section-title,
+:root:not([data-tema="escuro"]) .hero-tit{ text-shadow:none !important }
+
+
+/* o rotulo de 11px do comparativo herdava o bronze e o azul claro do tema
+   escuro; nesse tamanho, sobre branco, os dois reprovam */
+:root:not([data-tema="escuro"]) .comp-ruim .comp-tag{ color:#6B461A }
+
+:root:not([data-tema="escuro"]) .comp-bom .comp-tag{ color:#0A4288 }
+
+
+/* ---------- o comparativo: preservar a INTENCAO, nao a cor ---------- */
+/* No escuro o consorcio e quase branco com halo ciano e domina a tela; o
+   financiamento e bronze e recua. No claro, traduzir cor por cor invertia
+   isso: o bronze escuro pesava mais que o azul claro, e a opcao que o site
+   critica passava a mandar na secao. Aqui o consorcio volta a ser o mais
+   forte, agora por profundidade em vez de brilho. */
+:root:not([data-tema="escuro"]) .comp-bom .comp-total strong{ color:#08346B !important; text-shadow:none !important }
+
+:root:not([data-tema="escuro"]) .comp-bom .comp-linha strong{ color:#0B4283 !important }
+
+:root:not([data-tema="escuro"]) .comp-bom{ border-color:rgba(14,86,174,.4) !important }
+
+:root:not([data-tema="escuro"]) .comp-ruim .comp-total strong{ color:#8A6236 !important }
+
+:root:not([data-tema="escuro"]) .comp-ruim .comp-linha strong{ color:#6E5430 !important }
+
+
+/* ---------- sombras que existiam para descolar o texto do escuro ---------- */
+/* Eram halos PRETOS por baixo do texto claro. Sobre branco viram sujeira.
+   A funcao (separar o texto da fita) continua valendo, entao viram halo branco. */
+:root:not([data-tema="escuro"]) .eyebrow,
+:root:not([data-tema="escuro"]) .selo,
+:root:not([data-tema="escuro"]) .section-sub,
+:root:not([data-tema="escuro"]) .marca,
+:root:not([data-tema="escuro"]) .hero-sub,
+:root:not([data-tema="escuro"]) .hero-microcopy{
+  text-shadow:0 1px 2px rgba(255,255,255,.9), 0 0 10px rgba(255,255,255,.7) !important;
+}
+
+:root:not([data-tema="escuro"]) .section-title,
+:root:not([data-tema="escuro"]) .hero-tit,
+:root:not([data-tema="escuro"]) .calc-valor,
+:root:not([data-tema="escuro"]) .stat-num,
+:root:not([data-tema="escuro"]) .brilho{ text-shadow:none !important }
+}
+
+/* ==========================================================================
+   PAGINAS SIMPLES NO CLARO
+   Estas duas nasceram claras e foram escurecidas depois, com um bloco que
+   nao era condicional. No modo claro ele precisa sair de cena e devolver as
+   cores originais do texto, senao sobra branco sobre branco.
+   ========================================================================== */
+:root[data-tema="claro"] html,
+:root[data-tema="claro"] body{ background:#FFFFFF !important; color:#3D4A63 !important }
+:root[data-tema="claro"] .wrap{ color:#3D4A63 !important }
+:root[data-tema="claro"] body::before{ opacity:.35 }
+:root[data-tema="claro"] .eyebrow,
+:root[data-tema="claro"] .code,
+:root[data-tema="claro"] h1,
+:root[data-tema="claro"] h2,
+:root[data-tema="claro"] h3,
+:root[data-tema="claro"] strong{ color:#13254E !important }
+:root[data-tema="claro"] p,
+:root[data-tema="claro"] li,
+:root[data-tema="claro"] .sub{ color:#4A5770 !important }
+:root[data-tema="claro"] a{ color:#0E56AE !important }
+:root[data-tema="claro"] .back,
+:root[data-tema="claro"] .btns a{ color:#FFFFFF !important }
+
+@media (prefers-color-scheme: light){
+  :root:not([data-tema="escuro"]) html,
+  :root:not([data-tema="escuro"]) body{ background:#FFFFFF !important; color:#3D4A63 !important }
+  :root:not([data-tema="escuro"]) .wrap{ color:#3D4A63 !important }
+  :root:not([data-tema="escuro"]) body::before{ opacity:.35 }
+  :root:not([data-tema="escuro"]) .eyebrow,
+  :root:not([data-tema="escuro"]) .code,
+  :root:not([data-tema="escuro"]) h1,
+  :root:not([data-tema="escuro"]) h2,
+  :root:not([data-tema="escuro"]) h3,
+  :root:not([data-tema="escuro"]) strong{ color:#13254E !important }
+  :root:not([data-tema="escuro"]) p,
+  :root:not([data-tema="escuro"]) li,
+  :root:not([data-tema="escuro"]) .sub{ color:#4A5770 !important }
+  :root:not([data-tema="escuro"]) a{ color:#0E56AE !important }
+  :root:not([data-tema="escuro"]) .back,
+  :root:not([data-tema="escuro"]) .btns a{ color:#FFFFFF !important }
+}
+
+/* tokens que a folha de tema referencia e que estas paginas nao definiam:
+   a linha do seletor de tema caia na fonte padrao do navegador. */
+:root{
+  --f-text:"Manrope", ui-sans-serif, system-ui, sans-serif;
+  --f-display:"Sora", ui-sans-serif, system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, monospace;
+  --ouro:#D9A94E; --ouro-luz:#F5DFA0; --ouro-fundo:#8A6222;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+
+/* ==========================================================================
+   AVISO DE COOKIES
+   Barra no rodape. Enquanto esta aberta, ela SOBE os elementos fixos (o
+   WhatsApp, o Apollo, o voltar-ao-topo e a barra do celular) pela propria
+   altura, senao ela taparia justamente os botoes que convertem.
+   Depois da primeira escolha some para sempre.
+   ========================================================================== */
+.consent{
+  position:fixed; left:0; right:0; bottom:0; z-index:130;
+  display:flex; align-items:center; justify-content:center;
+  gap:20px; flex-wrap:wrap;
+  padding:15px 20px calc(15px + env(safe-area-inset-bottom, 0px));
+  background:rgba(3,6,15,.95);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border-top:1px solid var(--line);
+}
+/* o atributo hidden perde para o display:flex do autor. Foi assim que o
+   painel do Apollo ja nasceu visivel uma vez; aqui a regra vem junto. */
+.consent[hidden]{ display:none !important }
+
+.consent-txt{
+  flex:0 1 620px; margin:0; font-size:13.5px; line-height:1.6; color:var(--text-2);
+}
+.consent-txt a{ color:var(--accent); text-decoration:underline; text-underline-offset:2px }
+.consent-acoes{ display:flex; gap:10px; flex:0 0 auto }
+.consent-btn{
+  font:inherit; font-size:13.5px; font-weight:700; cursor:pointer;
+  padding:11px 22px; border-radius:999px; border:1px solid transparent;
+  transition:opacity .2s var(--ease, ease), background .2s var(--ease, ease);
+}
+.consent-btn:hover{ opacity:.86 }
+.consent-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:3px }
+/* fundo = cor do texto do tema, texto = cor da chapa: contraste maximo nos
+   dois temas sem depender de degrade de acento, que ja quebrou no claro */
+.consent-sim{ background:var(--text); color:#03060F }
+.consent-nao{ background:transparent; border-color:var(--line-2); color:var(--text) }
+
+/* Levanta por MARGEM, nunca por transform. A .mobile-cta se esconde com
+   transform:translateY(100%), e sobrescrever isso com !important prendia a
+   barra na tela em toda a pagina. Achado pelo autoteste, nao a olho. */
+html.consent-aberto .whatsapp-float,
+html.consent-aberto .ia-balao,
+html.consent-aberto .ao-topo{
+  margin-bottom:var(--consent-h, 0px);
+  transition:margin-bottom .25s ease;
+}
+/* a barra do celular so sobe quando esta de fato na tela: recolhida ela se
+   esconde com translateY(100%), que so alcanca o fim da tela se ela estiver
+   colada no rodape */
+html.consent-aberto .mobile-cta:not(.recolhido){
+  margin-bottom:var(--consent-h, 0px);
+  transition:margin-bottom .25s ease;
+}
+
+@media (max-width:640px){
+  .consent{ gap:11px; padding:13px 15px calc(13px + env(safe-area-inset-bottom, 0px)) }
+  .consent-txt{ flex:1 1 100%; font-size:12.8px }
+  .consent-acoes{ flex:1 1 100%; }
+  .consent-btn{ flex:1 1 0; padding:12px 10px }
+}
+
+:root[data-tema="claro"] .consent{ background:rgba(255,255,255,.96) }
+:root[data-tema="claro"] .consent-sim{ color:#FFFFFF }
+@media (prefers-color-scheme: light){
+  :root:not([data-tema="escuro"]) .consent{ background:rgba(255,255,255,.96) }
+  :root:not([data-tema="escuro"]) .consent-sim{ color:#FFFFFF }
+}
+
+/* ---------- botão secundário no tema claro ----------
+   Estas duas classes vêm de uma geração anterior e não existem no index, então
+   nenhuma regra de tema claro as cobria: a letra branca do bloco escuro, com
+   !important, atravessava para a página branca. */
+:root[data-tema="claro"] .back,
+:root[data-tema="claro"] .ghost{
+  background:rgba(19,37,78,.05) !important;
+  color:#13254E !important;
+  box-shadow:0 0 0 1px rgba(19,37,78,.16) !important;
+}
+:root[data-tema="claro"] .back:hover,
+:root[data-tema="claro"] .ghost:hover{
+  background:rgba(19,37,78,.09) !important;
+  color:#0A1A3A !important;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-tema="escuro"]) .back,
+  :root:not([data-tema="escuro"]) .ghost{
+    background:rgba(19,37,78,.05) !important;
+    color:#13254E !important;
+    box-shadow:0 0 0 1px rgba(19,37,78,.16) !important;
+  }
+  :root:not([data-tema="escuro"]) .back:hover,
+  :root:not([data-tema="escuro"]) .ghost:hover{
+    background:rgba(19,37,78,.09) !important;
+    color:#0A1A3A !important;
+  }
+}
+
+/* E com .btns na frente, porque existe um ".btns a{ color:#FFFFFF !important }"
+   mais adiante na folha que pinta TODO link do grupo de branco.
+
+   O .primary ENTROU NESTA LISTA depois, e vale contar por que ele estava
+   fora: o comentario antigo aqui dizia que aquela regra "e do botao primario,
+   que e azul e precisa de letra branca". Era verdade quando foi escrita. No
+   tema claro o primario virou linear-gradient(#7FD4FF,#3B8FE0), ciano CLARO,
+   e a folha ja declara color:#04101F na regra dele exatamente por isso — so
+   que com especificidade (0,1,0), que perde para os (0,3,1) do grupo. O
+   resultado era o fundo de uma regra com a tinta de outra: branco sobre
+   ciano, medido em 2,19:1. Com a tinta escura da 8,2:1.
+
+   A licao, que ja e a terceira nesta folha: cor cravada para um fundo que
+   depois muda nao avisa ninguem quando envelhece. */
+:root[data-tema="claro"] .btns a.ghost,
+:root[data-tema="claro"] .btns a.back{ color:#13254E !important }
+:root[data-tema="claro"] .btns a.primary{ color:#04101F !important }
+@media (prefers-color-scheme: light){
+  :root:not([data-tema="escuro"]) .btns a.ghost,
+  :root:not([data-tema="escuro"]) .btns a.back{ color:#13254E !important }
+  :root:not([data-tema="escuro"]) .btns a.primary{ color:#04101F !important }
+}
+</style>
+<meta name="theme-color" content="#03060F">
+</head>
+<body>
+<div class="wrap">
+  <div class="code">Erro 404</div>
+  <h1>Essa página não existe</h1>
+  <p>O link pode ter mudado ou o endereço foi digitado errado. Mas já que você chegou até aqui, aproveite para simular seu crédito — leva menos de um minuto.</p>
+  <div class="btns">
+    <a href="/" class="primary">Voltar ao início</a>
+    <a href="https://wa.me/554599999999" class="ghost" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+  /* ======================================================================
+     TEMA CLARO E ESCURO
+     Tres estados: 'claro', 'escuro' e ausencia de escolha, que segue o
+     sistema. O CSS ja resolve os tres; aqui so gravamos a decisao, avisamos
+     quem desenha em canvas, e trocamos a cor da barra do navegador.
+     ====================================================================== */
+  var Tema = (function(){
+    var raiz = document.documentElement;
+    var mqClaro = window.matchMedia('(prefers-color-scheme: light)');
+    var meta = document.querySelector('meta[name="theme-color"]');
+
+    function escolhido(){
+      var t = raiz.getAttribute('data-tema');
+      return (t === 'claro' || t === 'escuro') ? t : null;
+    }
+    function claroAgora(){
+      var e = escolhido();
+      if (e) return e === 'claro';
+      return mqClaro.matches;
+    }
+    function aplicar(){
+      var claro = claroAgora();
+      raiz.classList.toggle('t-claro', claro);
+      raiz.style.colorScheme = claro ? 'light' : 'dark';
+      if (meta) meta.setAttribute('content', claro ? '#FFFFFF' : '#03060F');
+            document.querySelectorAll('.tema-btn').forEach(function(b){
+        b.setAttribute('aria-label', claro ? 'Mudar para o modo escuro' : 'Mudar para o modo claro');
+        b.setAttribute('aria-pressed', claro ? 'true' : 'false');
+      });
+      var rot = document.querySelector('.tema-linha .rotulo');
+      if (rot) rot.textContent = claro ? 'Modo claro' : 'Modo escuro';
+    }
+    function alternar(){
+      /* a pessoa clicou: a partir daqui a escolha dela manda, nao o sistema */
+      var claro = claroAgora();
+      try { localStorage.setItem('astro-tema', claro ? 'escuro' : 'claro'); } catch(e){}
+      raiz.setAttribute('data-tema', claro ? 'escuro' : 'claro');
+      aplicar();
+    }
+    /* enquanto nao houver escolha, o site acompanha o sistema ao vivo */
+    mqClaro.addEventListener('change', function(){ if (!escolhido()) aplicar(); });
+    document.addEventListener('click', function(e){
+      var b = e.target && e.target.closest ? e.target.closest('.tema-btn') : null;
+      if (b) { e.preventDefault(); alternar(); }
+    });
+    aplicar();
+    return { aplicar: aplicar, alternar: alternar, claro: claroAgora };
+  })();
+
+
+})();
+</script>
+
+<div class="consent" id="consent" role="region" aria-label="Aviso de cookies" hidden>
+  <p class="consent-txt">Usamos cookies para medir como o site é usado e, quando houver,
+    mensurar nossos anúncios. Você pode recusar sem perder nada do site.
+    <a href="/privacidade.html">Como tratamos seus dados</a>.</p>
+  <div class="consent-acoes">
+    <button class="consent-btn consent-nao" type="button" id="consentNao">Recusar</button>
+    <button class="consent-btn consent-sim" type="button" id="consentSim">Aceitar</button>
+  </div>
+</div>
+<script>
+/* Consentimento. Nada de medicao acontece sem um "sim" explicito. */
+(function(){
+  "use strict";
+  var CHAVE = 'astro-consentimento';
+  function lido(){ try { return localStorage.getItem(CHAVE); } catch(e){ return null; } }
+  function grava(v){ try { localStorage.setItem(CHAVE, v); } catch(e){} }
+
+  window.AstroConsentimento = {
+    permitido: function(){ return lido() === 'sim'; },
+    escolha: lido
+  };
+
+  /* PONTO UNICO onde a medicao entra no ar. O Google Analytics e o Pixel da
+     Meta devem ser ligados AQUI DENTRO, e nunca no <head>: no head eles
+     rodariam antes da pessoa escolher. Enquanto nao houver ID, nao faz nada. */
+  window.AstroMedicao = { ligar: function(){ /* IDs entram aqui */ } };
+
+  var caixa = document.getElementById('consent');
+  if (!caixa) return;
+  var raiz = document.documentElement;
+
+  function fecha(){
+    caixa.hidden = true;
+    raiz.classList.remove('consent-aberto');
+    raiz.style.removeProperty('--consent-h');
+  }
+
+  if (lido()){
+    if (lido() === 'sim') window.AstroMedicao.ligar();
+    return;
+  }
+
+  caixa.hidden = false;
+  raiz.classList.add('consent-aberto');
+  function mede(){ raiz.style.setProperty('--consent-h', caixa.offsetHeight + 'px'); }
+  mede();
+  window.addEventListener('resize', mede);
+
+  document.getElementById('consentSim').addEventListener('click', function(){
+    grava('sim'); fecha(); window.AstroMedicao.ligar();
+  });
+  document.getElementById('consentNao').addEventListener('click', function(){
+    grava('nao'); fecha();
+  });
+})();
+</script>
+</body>
+</html>
