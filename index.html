@@ -748,268 +748,102 @@ body.menu-aberto .whatsapp-float,body.menu-aberto .mobile-cta{ opacity:0; pointe
   width:100%;
   /* min-width:0 — SEM ISSO, bug real achado no celular: como item de
      grid (filho de .hero-grade), o mínimo default é "auto", que olha pro
-     min-content de dentro (a estante com os 3 vídeos) em vez de respeitar
-     o "width:100%" daqui. Media no 375px: a coluna certa era 331px, mas
-     .hero-lado-video renderizava 872px — quase 2.6x mais larga que a
-     tela, cortada sem aviso pelo overflow:hidden do .hero-palco (aviso a
-     mais: os cartões apareciam claramente maiores que a tela, alguns
-     cortados ao meio). min-width:0 é o jeito padrão de dizer "não, respeita
-     o width — não expanda pelo conteúdo". */
+     min-content de dentro (a estante com os vídeos) em vez de respeitar
+     o "width:100%" daqui. min-width:0 é o jeito padrão de dizer "não,
+     respeita o width — não expanda pelo conteúdo". */
   min-width:0;
-  /* MODELO NOVO: 3 cartões do MESMO TAMANHO empilhados, exatamente como o
-     leque de "formas de usar" — pedido explícito: "os cards devem ficar
-     um por cima do outro" e depois "assim como ficou nas formas de usar".
-     Cada cartão ocupa 1/2.1 da janela EM REPOUSO (ver --f no
-     .carrossel-trilho: com -45% de sobreposição nos dois vizinhos, 3
-     cartões de 1/2.1 fecham a fileira exatamente na largura da janela,
-     sem sobra nem corte, e o do meio nasce centralizado sozinho).
+  /* MODELO SEM SOBREPOSIÇÃO — pedido explícito, substituindo a pirâmide
+     anterior (3 cartões cobrindo parte um do outro): "os vídeos não irão
+     se sobrepor, então não precisa de animações complexas". 1 vídeo maior
+     em cima ("o que é consórcio", o gancho principal) + 2 vídeos embaixo,
+     lado a lado, cada um 30% menor que o de cima (pedido explícito) — ver
+     .video-pilha/.video-linha-topo/.video-linha-base logo abaixo pro
+     layout. O fim da sobreposição também fecha toda a complexidade que
+     ela puxava: nearest-center por JS, z-index por posição,
+     transform-origin assimétrico no cartão do meio, filtro de hitbox por
+     getBoundingClientRect (era tudo pra evitar que o vizinho ativo,
+     aumentado, ficasse POR CIMA do cartão que a pessoa queria — inclusive
+     a causa do "play bugado" relatado no celular). Sem sobreposição,
+     ':hover'/':focus-within' comuns resolvem sozinhos: não tem mais
+     ninguém desenhado por cima escondendo o vizinho.
 
-     CORREÇÃO (a primeira conta de --video-teto estava errada): pedido
-     "aumentaria o tamanho dos cards, tem espaço de sobra" — medindo ao
-     vivo em 1920x1080 (tela comum, ao contrário da janela alta que usei
-     pra testar antes), quem trava o tamanho NÃO é o teto de 100% — é
-     --video-teto, e a fórmula anterior (*2.72) contava a sobreposição
-     horizontal (padding-inline do trilho) duas vezes de jeitos
-     incompatíveis, entregando só 757px de janela quando dava pra chegar
-     em ~940px com a MESMA folga de segurança. Refeita do zero abaixo, e
-     dessa vez tirando proveito de verdade: o crescimento de :hover/.ativo
-     caiu de 22% pra 15% (ainda um "pop" bem visível, só que pede menos
-     respiro reservado) e o padding caiu de 5%/7% pra 2,5%/4% (o mínimo
-     que cobre esse crescimento menor, ver .carrossel-trilho) — as duas
-     coisas juntas sobram pro CARTÃO em si, não pro respiro.
-
-     A conta certa: a área do trilho que precisa caber em --video-teto é
-     o padding-block (2,5%+2,5% da própria largura) MAIS a altura do
-     vídeo 16:9 de UM cartão. A largura do cartão não é --f da largura do
-     trilho inteiro — o padding-inline (4%+4%) encolhe a área onde os
-     cartões vivem primeiro. Cartão = --f * larguraDoTrilho * (1-0,08).
-     Altura do vídeo = cartão * 9/16. Então:
-       larguraDoTrilho * (0,05 + --f*0,92*0,5625) ≤ --video-teto
-       larguraDoTrilho * (0,05 + 0,4762*0,92*0,5625) ≤ --video-teto
-       larguraDoTrilho * 0,2965 ≤ --video-teto
-       larguraDoTrilho ≤ --video-teto / 0,2965 ≈ --video-teto * 3,374
-     (a legenda do cartão e a fileira de pontos/dica abaixo, que não
-     escalam com a largura, continuam fora daqui — entram como px fixos
-     direto no "folga" do JS). Teto absoluto: cartão em destaque
-     (1,15 * --f * 0,92 * larguraDoTrilho) perto do tamanho de ANTES do
-     carrossel (1180px) dá larguraDoTrilho ≤ 1180/(1,15*0,4381) ≈ 2342px.
-     O teto de 100% fica INTOCADO de propósito: ele é a rede de segurança
-     contra a janela vazar pra fora da coluna do Hero, e só ele é
-     relativo ao pai — inflar um px ou o video-teto (ambos absolutos)
-     nunca estoura sozinho, o teto de 100% barra se precisar.
-
-     MULTIPLICADOR REFEITO (3.293 → 2.316) pela pirâmide: pedido explícito
-     "vamos triangular os vídeos... cobrir parte um do outro pra economizar
-     espaço e ter um efeito de movimento".
-
-     TRÊS TENTATIVAS ERRADAS ANTES DESTA, todas medidas ao vivo e
-     descartadas (pra não repetir o mesmo caminho):
-     1) Só --desce (0,22, depois 0,32): resolvia o REPOUSO, mas o
-        :hover/.ativo cresce 15% A PARTIR DO PRÓPRIO CENTRO — a metade de
-        baixo desse crescimento (7,5%) comia a folga de novo.
-     2) --sobe (margin-top negativo só no cartão do meio) pra cobrir esse
-        crescimento: funcionou pro clearance, mas cada rodada foi
-        empurrando o multiplicador pra baixo (3.293→2.506→2.260→1.954),
-        e o CARTÃO em si desabou pra 91px de altura em 1366x768 — a
-        legenda/botão do :hover, desenhados em PX FIXO pra um cartão de
-        300px+, passaram a tampar o próprio título da capa ativa. Pedido
-        explícito depois de ver isso ao vivo: "agora está cortando".
-     3) Reduzir a sobreposição HORIZONTAL (-45%→-18%) achando que uma
-        faixa de colisão mais fina resolvia: ERRADO — o clearance que
-        importa é vertical (a quina de BAIXO do cartão do meio tem que
-        ficar acima do título do vizinho), e isso não depende de quanto
-        os dois se sobrepõem no eixo X, só da diferença de altura entre
-        eles. A manchete da capa ocupa até uns 96% da largura do cartão
-        (quase a borda), então mesmo pouca sobreposição horizontal ainda
-        alcançava o texto — não resolveu nada, só reduziu --f à toa.
-     4) `transform-origin:50% 100%` no cartão do meio (cresce só PRA CIMA
-        no :hover, a quina de baixo nunca se move) + dobrar o padding-top
-        pra caber os 15% inteiros de crescimento: a ideia da origem estava
-        certa, mas dobrar o padding-top pra UM cartão só encareceu a
-        fileira TODA de novo — testado ao vivo no orçamento mais apertado
-        (1366x768, --video-teto natural ~149px): o cartão não passava de
-        ~82px de altura por mais que o piso subisse, porque o padding
-        extra comia exatamente o que sobrava.
-
-     SOLUÇÃO DE VERDADE, as duas peças juntas: (a) `transform-origin:50%
-     100%` continua no cartão do meio (ver nth-child(2) abaixo) — cresce
-     só pra cima, então PRECISA só da MESMA folga de sempre no topo (não
-     do dobro), e (b) o cartão do meio ganha sua PRÓPRIA regra de .ativo
-     com escala menor (1.075 em vez de 1.15 — ver mais abaixo), então
-     "mesma folga de sempre" (7,5%) já cobre o crescimento dele igual
-     cobre o das pontas. Padding volta a ser SIMÉTRICO (3%+4px nos dois
-     lados, ver .carrossel-trilho) — nenhum custo extra de padding. Único
-     custo de verdade da pirâmide é --desce, calibrado ao vivo no
-     orçamento mais apertado (0,50 — ver comentário de --desce):
-       f = 1/(3 - 2*0,20) = 1/2,6 = 0,38462; f*0,91 = 0,35
-       coeficiente = 0,06 (padding-block) + f*0,91*0,5625 (vídeo) + f*0,91*0,50 (descida)
-                   = 0,06 + 0,19688 + 0,175 = 0,43188
-       larguraDoTrilho ≤ --video-teto / 0,43188 ≈ --video-teto * 2,316
-     Cartão fica menor que antes da pirâmide em telas apertadas (onde
-     --video-teto bate no piso — ver --piso no JS, subiu junto) mas não
-     mais NEM DE LONGE tão pequeno quanto nas tentativas 2 e 4. */
-  max-width:min(2368px, 100%, calc(var(--video-teto, 9999px) * 2.316));
+     A CONTA (única, as duas fileiras juntas, pra aproveitar o espaço ao
+     máximo — pedido explícito "o dimensionamento deve ser feito em
+     conjunto"): base = 2 cartões de largura Wb + 1 vão --gap-v entre
+     eles; cartão do topo é 1/0,7 MAIOR que os de baixo (W = Wb/0,7, já
+     que eles são 30% MENORES que ele, não o contrário). A composição
+     inteira (C) é tão larga quanto a fileira de baixo, que é mais larga
+     que o vídeo do topo sozinho:
+       C = 2*Wb + --gap-v = 1,4*W + --gap-v  →  W = (C - --gap-v) / 1,4
+     Altura total, sem sobreposição nenhuma (topo + vão + base), incluindo
+     o padding PRÓPRIO de cada .video-card (não escala com a largura, ver
+     P no JS de --video-teto — cada fileira tem o seu, são DUAS agora,
+     não uma só como na pirâmide):
+       H = (0,5625*W + P) + --gap-v + (0,5625*0,7*W + P)
+         = 0,95625*W + --gap-v + 2P
+     Substituindo W = (C-G)/1,4 (G = --gap-v):
+       H = 0,6830357*C + 0,3169643*G + 2P
+     Isolando C pra caber em --video-teto (a altura que sobra de verdade,
+     medida em JS — mesmo mecanismo de antes, ver a função mede(); G e P
+     entram no "folga" de lá, não aqui, pra manter a fórmula daqui uma
+     multiplicação pura):
+       C ≤ (--video-teto - 0,3169643*G - 2P) / 0,6830357
+     Com G e P já descontados do --video-teto pelo JS (ver mede()), sobra
+     aqui só o fator puro: C ≤ --video-teto / 0,6830357 ≈ --video-teto * 1,4641.
+     Sem sobreposição, NÃO precisa reservar padding pra crescimento de
+     hover — o hover daqui é só translateY (ver .carrossel-item:hover),
+     que não pede reserva porque .video-pilha não recorta overflow (não
+     tem mais motivo pra recortar: nada vaza sobre o vizinho). */
+  max-width:min(2200px, 100%, calc(var(--video-teto, 9999px) * 1.4641));
   margin-inline:auto;
 }
-.hero-lado-video .carrossel-trilho{
-  /* fração da janela que cada cartão ocupa em repouso — a sobreposição
-     horizontal (-20%, ver margin-left de :not(:first-child) abaixo) aqui
-     é só estética, não faz parte da conta de não-tampar-título (ver o
-     comentário grande de .hero-lado-video pro motivo): f = 1/(3-2*0,20).
-     Antes da pirâmide era -45% (f=1/2,1) — o novo valor é mais discreto
-     de propósito, já que quem garante o "não tampa" agora é --desce +
-     transform-origin do cartão do meio, não o quanto eles se encavalam
-     no X. */
-  --f: calc(1 / 2.6);
-  /* PIRÂMIDE: fração da LARGURA DO CARTÃO que os dois das pontas descem
-     em relação ao do meio — pedido explícito de "triangular os vídeos...
-     cobrir parte um do outro". 0,38: medido ao vivo contra a posição real
-     do título nas duas capas vizinhas (canvas em cima dos JPGs), com
-     folga de verdade nos dois lados — ver o comentário grande de
-     .hero-lado-video pro histórico de valores menores que pareciam bons
-     na conta mas não sobreviviam ao :hover. Testado ao vivo no ORÇAMENTO
-     mais apertado de verdade (o --video-teto natural de 1366x768, ~149px,
-     não um valor arbitrário) — 0,50 é o menor valor que sobra folga
-     positiva nos dois lados nesse pior caso. MUDAR AQUI PEDE MUDAR o
-     multiplicador 2.316 lá. */
-  --desce: 0.50;
-  display:flex; align-items:flex-start; justify-content:center;
-  gap:0;
-  /* ESTÁTICO DE VERDADE: nada arrasta, nada rola, nada recentraliza —
-     pedido explícito depois de eu ter tentado "hover recentraliza" (irPara
-     no mouseenter) e o pedido ter voltado: "ficou ruim passar o mouse em
-     cima e movimentar tudo, seria melhor simplesmente ficarem estáticos e
-     ao passar o mouse destacar o que o mouse está em cima, assim como
-     ficou nas formas de usar". overflow:clip (não "auto") nos dois eixos:
-     nenhum dos dois é "visible", então a regra do spec que promove um
-     eixo pro outro (a mesma que obriga o leque a rolar) nunca entra em
-     ação aqui — não tem scroll pra travar porque os 3 cartões já fecham a
-     fileira exatamente na largura da janela (ver --f). O padding abaixo
-     reserva o respiro do crescimento de :hover/.ativo (+15%), que scale()
-     não soma nem ao scrollWidth nem ao scrollHeight — sem essa reserva o
-     cartão em destaque cortaria nas bordas, do mesmo jeito que cortava no
-     leque.
-
-     Vertical "3% + 4px" nos dois lados, SIMÉTRICO de novo (uma rodada
-     chegou a dobrar o topo pra "6%+8%" pensando que o cartão do meio
-     precisava do dobro de folga — ver o comentário grande de
-     .hero-lado-video pro raciocínio completo e por que foi revertido: o
-     cartão do meio cresce menos no :hover, ver .ativo dele, não o padding
-     que cresceu). O "3%" cobre os 7,5% da altura do VÍDEO 16:9 (a parte
-     proporcional à largura); o "+4px" cobre os mesmos 7,5% em cima do que
-     o vídeo NÃO é — o padding PRÓPRIO do .video-card (12-16px, fixo, não
-     escala com a largura). Esse "+4px" é px FIXO que também precisa estar
-     subtraído do "folga" do JS — MUDAR AQUI PEDE MUDAR LÁ (ver
-     --video-teto). O "3%" e o "4,5%" seguem sendo os números usados no
-     multiplicador de --video-teto em .hero-lado-video. Horizontal 4,5%:
-     cobre o ~3,3% que só as pontas (primeiro e último cartão) vazam pro
-     lado de fora ao crescer, com folga de verdade. */
-  overflow:clip;
-  padding:calc(3% + 4px) 4.5%;
+.video-pilha{
+  /* vão entre as duas fileiras E entre os dois cartões de baixo — o
+     MESMO valor nos dois eixos de propósito, pra manter a conta acima
+     como uma multiplicação só (ver o comentário grande em
+     .hero-lado-video). MUDAR AQUI PEDE MUDAR o "G" na conta de lá E o
+     "folga" no JS de --video-teto. */
+  --gap-v: 14px;
+  display:flex; flex-direction:column; align-items:stretch;
+  gap:var(--gap-v);
 }
-/* os vizinhos entram POR BAIXO (margem negativa, não gap) — pedido
-   explícito: "ficar um pouco por trás do vídeo do meio pra dar pra ver
-   mais da capa". Repouso: TODOS do mesmo tamanho (scale 1) — só
-   :hover/.ativo cresce; ver comentário grande abaixo de por que o
-   empilhamento (z-index) é fixo por posição, não por quem está em foco. */
+.video-linha-topo{ display:flex; justify-content:center }
+.video-linha-topo .carrossel-item{
+  /* W = (C - G) / 1,4 — ver a conta grande em .hero-lado-video. "100%"
+     aqui é a largura de .video-linha-topo, que por sua vez é 100% de
+     .video-pilha (= C, a composição inteira). */
+  width:calc((100% - var(--gap-v)) / 1.4);
+}
+.video-linha-base{ display:flex; gap:var(--gap-v) }
+.video-linha-base .carrossel-item{ flex:1 1 0; min-width:0 }
+/* SEM SOBREPOSIÇÃO — ver o comentário grande em .hero-lado-video pro
+   motivo/pedido. Cada cartão só existe dentro da sua própria fileira
+   (.video-linha-topo ou .video-linha-base, que já dão a largura), então
+   não precisa mais de --f, margin-left negativo, margin-top de descida,
+   nth-child de z-index nem .ativo por JS — tudo isso só existia pra
+   sustentar a pirâmide. */
 .hero-lado-video .carrossel-item{
-  width:calc(var(--f) * 100%); flex:none; position:relative;
-  /* container pro cqw do .item-cta/.item-legenda (ver os dois) — assim a
-     fonte deles acompanha o tamanho do PRÓPRIO cartão, não fica em px
-     fixo desenhado pra um tamanho só. */
+  position:relative;
+  /* container pro cqw do .item-cta/.item-legenda/.video-play (ver os
+     três) — assim eles acompanham o tamanho do PRÓPRIO cartão, e o do
+     topo (maior) e os da base (30% menores) escalam cada um no seu
+     tamanho certo, em vez de um valor fixo pensado pra um tamanho só
+     (era isso, no fundo, que deixava o botão de play "bugado" — grande
+     demais pro cartão pequeno — no celular). */
   container-type:inline-size;
-  transition:transform .32s var(--ease), opacity .32s var(--ease), box-shadow .32s var(--ease);
-  /* sombra de repouso, sugestão aceita ("sombra mais forte entre os
-     cards"): sem ela os 3 liam como uma fileira quase colada, não uma
-     pilha — cada cartão empurra sombra pra DIREITA (onde o próximo da
-     pilha mora, já que ESQUERDA cobre CENTRO cobre DIREITA) reforçando
-     que ele está por cima do vizinho, não do lado. */
-  box-shadow:14px 0 28px -8px rgba(3,6,15,.55);
+  transition:transform .28s var(--ease), box-shadow .28s var(--ease);
+  box-shadow:0 14px 34px rgba(3,6,15,.4);
 }
-/* -40%, não mais -45% do modelo antigo — ver o comentário grande de
-   .hero-lado-video: essa sobreposição é só estética (quem evita tampar
-   título é --desce + transform-origin do meio, não o quanto os cartões
-   se encavalam no X), então dá pra ajustar por gosto sem afetar o
-   tamanho do cartão nem o "cabe numa tela só" — não mexe em --f. Baixado
-   de volta de 20% pra 38%: pedido explícito depois de ver ao vivo, "pode
-   aproximar os dois vídeos de baixo" (as duas pontas da pirâmide
-   estavam espalhadas demais depois da rodada que reduziu a sobreposição
-   pra 20% tentando resolver o problema errado — ver histórico). De 38%
-   pra 40%: pedido "a distância horizontal está quase perfeita, eu
-   diminuiria pouquíssima coisa" — ajuste pequeno de propósito, o vão
-   entre as duas pontas continua bem positivo (~20% da largura do
-   cartão, medido ao vivo, longe de se encostarem). */
-.hero-lado-video .carrossel-item:not(:first-child){
-  margin-left:calc(var(--f) * 100% * -0.40);
-}
-/* PIRÂMIDE — pedido explícito: "triangular os vídeos... uma posição em
-   que seja possível ler a capa de todos, mas eles cubram parte um do
-   outro". Só as pontas descem (o do meio fica no topo, encostado no
-   padding-top de sempre) — "100%" aqui é a largura do CONTEINER flex
-   (a mesma base que var(--f) já usa pra largura/sobreposição horizontal),
-   então var(--desce) sobe/desce como fração do próprio cartão, não da
-   janela inteira. */
-.hero-lado-video .carrossel-item:nth-child(1),
-.hero-lado-video .carrossel-item:nth-child(3){
-  margin-top:calc(var(--f) * 100% * var(--desce));
-}
-/* O cartão do MEIO cresce só PRA CIMA no :hover/.ativo (origem no canto
-   de baixo, não no centro) — ver o comentário grande de .hero-lado-video
-   pro motivo: assim a quina de baixo NUNCA se move, e o crescimento
-   jamais alcança o título do vizinho por baixo. E cresce MENOS que as
-   pontas (1.075, não 1.15 — ver a regra de .ativo logo abaixo, mais
-   específica que a genérica de .carrossel-item.ativo e por isso vence):
-   como tudo desse crescimento vira movimento pra CIMA (a base não se
-   move), 7,5% pra cima é EXATAMENTE o que o padding-top de sempre já
-   reserva (o mesmo que as pontas usam pra crescer 7,5% pra cima a partir
-   do próprio centro) — não precisa de nenhum padding extra pra isso. */
-.hero-lado-video .carrossel-item:nth-child(2){
-  transform-origin:50% 100%;
-}
-.hero-lado-video .carrossel-item:nth-child(2).ativo{
-  transform:scale(1.075);
-}
-/* EMPILHAMENTO FIXO POR POSIÇÃO, não por "quem está ativo" — pedido
-   explícito depois de eu ter tentado por JS/.ativo duas vezes: "era o do
-   meio em cima do da direita e o da esquerda em cima do do centro", ou
-   seja ESQUERDA cobre CENTRO cobre DIREITA, sempre. Puro CSS por
-   nth-child, do jeito que o leque já faz (lá é crescente da esquerda pra
-   direita; aqui o pedido foi o sentido contrário — cada seção pode ter
-   sua própria "mão" de cartas).
-
-   AJUSTADO pela pirâmide: o do meio (o mais alto) fica por CIMA dos dois
-   — é ele o cartão "principal" da composição. Entre as pontas, a esquerda
-   continua ganhando da direita (mesma ordem de leitura de antes, sem
-   motivo pra inverter). */
-.hero-lado-video .carrossel-item:nth-child(1){ z-index:2 }
-.hero-lado-video .carrossel-item:nth-child(2){ z-index:3 }
-.hero-lado-video .carrossel-item:nth-child(3){ z-index:1 }
-/* O DESTAQUE — só a APARÊNCIA é CSS (.ativo cresce, sobe pro topo, ganha
-   sombra); QUEM ganha .ativo com o mouse virou JS (ver o IIFE do Hero,
-   perto de "ver .hero-lado-video .carrossel-item:hover/.ativo"), não mais
-   ":hover" puro. MOTIVO — bug real, visto ao vivo: com ESQUERDA cobre
-   CENTRO cobre DIREITA em repouso (nth-child acima) e -45% de sobreposição
-   entre vizinhos, o cartão do CENTRO já nasce com uma fatia visível bem
-   fina (só a ponta que nem ESQUERDA nem DIREITA cobrem); no instante em
-   que DIREITA vira .ativo (cresce 15%, z-index:50), essa fatia FECHA de
-   vez — o mouse não tem mais nenhum pixel do centro pra passar por cima e
-   trocar o destaque, só dá pra sair da fileira inteira e voltar a entrar
-   por fora. ":hover" no PRÓPRIO cartão nunca resolveria isso, porque quem
-   recebe o evento é sempre o elemento que está por cima visualmente — e é
-   exatamente esse elemento (o vizinho grande) que atrapalha. A solução:
-   o JS mede a posição do CENTRO de cada cartão (fixa, scale() não move
-   centro) e usa a coordenada X do mouse pra saber de qual centro ele está
-   mais perto, ignorando de propósito o que está desenhado por cima nesse
-   pixel — mover o mouse em direção ao centro geométrico do cartão do meio
-   sempre o destaca, mesmo que o vizinho aumentado ainda esteja cobrindo
-   aquele ponto visualmente por uma fração de segundo até a transição
-   encolher ele de novo. 15%, não 22% como o leque: aqui o crescimento
-   pede padding reservado (ver .carrossel-trilho), e cada ponto percentual
-   a menos de crescimento é padding a menos e CARTÃO a mais — 15% ainda é
-   um "pop" bem visível e libera espaço de sobra pro tamanho de repouso. */
-.hero-lado-video .carrossel-item.ativo{
-  z-index:50; transform:scale(1.15);
-  box-shadow:0 26px 60px rgba(3,6,15,.45);
+/* HOVER SIMPLES DE VERDADE — o que a pirâmide não podia ter (crescer
+   feria o vizinho de baixo/do lado). Sem sobreposição, um leve
+   translateY já basta pra dar feedback, e não precisa reservar respiro
+   nenhum ao redor porque .video-pilha não recorta overflow (nada vaza
+   sobre ninguém). :focus-within pelo mesmo motivo do resto do site:
+   navegação por teclado enxerga o mesmo destaque que o mouse. */
+.hero-lado-video .carrossel-item:hover,
+.hero-lado-video .carrossel-item:focus-within{
+  transform:translateY(-4px);
+  box-shadow:0 22px 46px rgba(3,6,15,.5);
 }
 /* BOTÃO "SAIBA MAIS" POR CARTÃO — pedido explícito: "botões que ao passar
    o mouse aparecessem e direcionassem o cliente pra uma página que fala
@@ -1033,21 +867,13 @@ body.menu-aberto .whatsapp-float,body.menu-aberto .mobile-cta{ opacity:0; pointe
 }
 .hero-lado-video .item-cta .seta{ width:13px; height:13px; flex:none; transition:transform .3s var(--ease) }
 .hero-lado-video .item-cta:hover .seta{ transform:translateX(3px) }
-.hero-lado-video .carrossel-item.ativo .item-cta{
-  opacity:1; transform:translateY(0); pointer-events:auto;
-}
 /* LEGENDA BREVE NO DESTAQUE — pedido explícito: "um breve texto no vídeo
    quando ele estivesse destacado". Mesmo texto do aria-label do botão (sem
-   inventar frase nova), só aparece junto com o "saiba mais" — outro overlay
-   absoluto, mesma lógica de não somar altura. -webkit-line-clamp:2 corta
-   com reticências se dois vídeos tiverem descrição bem mais longa que os
-   outros, em vez de estourar a capa.
-   TUDO EM % / cqw, não mais px fixo — pedido explícito depois de ver ao
-   vivo: "agora está cortando" (a legenda, desenhada pra um cartão de
-   300px+, tampava o próprio título quando a pirâmide encolheu o cartão).
-   % de bottom/left/right é relativo ao próprio .carrossel-item (container
-   do position:absolute); cqw pede container-type:inline-size nele, ver
-   `.hero-lado-video .carrossel-item` acima. */
+   inventar frase nova), outro overlay absoluto, mesma lógica de não somar
+   altura. -webkit-line-clamp:2 corta com reticências se dois vídeos
+   tiverem descrição bem mais longa que os outros, em vez de estourar a
+   capa. TUDO EM % / cqw: acompanha tanto o cartão maior do topo quanto os
+   30% menores da base, cada um no seu próprio tamanho. */
 .hero-lado-video .item-legenda{
   position:absolute; left:4%; right:4%; bottom:16%; z-index:4;
   font-family:var(--f-text); font-size:clamp(9px,3.2cqw,12px); line-height:1.35; font-weight:600;
@@ -1056,62 +882,40 @@ body.menu-aberto .whatsapp-float,body.menu-aberto .mobile-cta{ opacity:0; pointe
   opacity:0; transform:translateY(6px); pointer-events:none;
   transition:opacity .3s var(--ease), transform .3s var(--ease);
 }
-.hero-lado-video .carrossel-item.ativo .item-legenda{ opacity:1; transform:translateY(0) }
-/* PONTOS — agora em fluxo normal ABAIXO da fileira, não mais sobrepostos
-   ao card (o card de repouso encolheu pra caber 3 do mesmo tamanho, e um
-   "bottom:58px" fixo não acompanha esse tamanho novo) — a folga extra que
-   isso consome já está somada em "folga" no JS de --video-teto. Clicáveis:
-   além de sinalizar "são 3", trocam qual cartão fica em destaque sem
-   precisar passar o mouse (toque, ou preferência de quem não quer usar
-   hover). */
-.hero-carrossel-pontos{
-  display:flex; justify-content:center; align-items:center; gap:8px;
-  margin-top:12px; width:fit-content; margin-inline:auto;
-  /* o vidro sumiu quando os pontos saíram de cima do vídeo (onde uma
-     pílula escura fazia falta pra ler por cima de qualquer capa) pra
-     baixo dele, no fundo escuro da própria página — pedido explícito
-     depois: "removeu o liquid glass de alguns botões... coloque de
-     volta, sem exagero". Sem exagero mesmo: aqui embaixo o contraste já
-     é alto sozinho, então uma pílula BEM mais sutil que a original
-     (era rgba(3,6,15,.38) — pensada pra vencer o brilho de uma capa
-     clara) basta pra devolver a textura de vidro sem pesar. */
-  padding:7px 10px; border-radius:100px;
-  background:rgba(147,169,201,.06);
-  backdrop-filter:blur(14px) saturate(160%);
-  -webkit-backdrop-filter:blur(14px) saturate(160%);
-  box-shadow:0 0 0 1px rgba(147,169,201,.12);
-}
-.hero-carrossel-pontos .ponto{
-  width:7px; height:7px; padding:0; border:none; border-radius:50%;
-  background:rgba(255,255,255,.4); cursor:pointer;
-  transition:background .3s var(--ease), transform .3s var(--ease);
-}
-.hero-carrossel-pontos .ponto:hover{ background:rgba(255,255,255,.7) }
-.hero-carrossel-pontos .ponto[aria-selected="true"]{
-  background:var(--accent-hi); transform:scale(1.3);
-}
-/* DICA — mesmo motivo do vidro nos pontos acima (ver comentário lá):
-   devolvido bem sutil, só o suficiente pra ler como "pílula", não como
-   painel. Só em quem tem mouse de verdade: no toque a pessoa já esbarra
-   o dedo nos vizinhos e descobre sozinha. "escolher" virou "destacar":
-   não troca mais o vídeo em foco por ele mesmo (isso foi removido —
-   passar o mouse só ilumina no lugar, não centraliza nada), então a
-   palavra certa é a mesma do que realmente acontece. Fica em fluxo
-   normal — nunca mais some sozinha, porque não há mais "primeira vez
-   que o hover funciona" pra marcar: o :hover é só CSS. */
+/* DESTAQUE VIROU PURO :hover/:focus-within — pedido explícito ("não
+   precisa de animações complexas" agora que os vídeos não se sobrepõem):
+   antes disso precisava de JS porque o vizinho ativo, aumentado, ficava
+   POR CIMA do cartão que a pessoa realmente queria (ver o histórico que
+   morava aqui). Sem sobreposição, cada cartão só escuta o próprio mouse,
+   sem ninguém por cima atrapalhando. */
 @media (hover:hover) and (pointer:fine){
-  .hero-carrossel-dica{
-    display:block; text-align:center; margin:12px auto 0; width:fit-content;
-    font-family:var(--f-mono); font-size:12px; font-weight:600; letter-spacing:.08em;
-    color:rgba(255,255,255,.65); text-transform:uppercase;
-    padding:6px 13px; border-radius:100px;
-    background:rgba(147,169,201,.06);
-    backdrop-filter:blur(14px) saturate(160%);
-    -webkit-backdrop-filter:blur(14px) saturate(160%);
-    box-shadow:0 0 0 1px rgba(147,169,201,.12);
+  .hero-lado-video .carrossel-item:hover .item-cta,
+  .hero-lado-video .carrossel-item:focus-within .item-cta{
+    opacity:1; transform:translateY(0); pointer-events:auto;
+  }
+  .hero-lado-video .carrossel-item:hover .item-legenda,
+  .hero-lado-video .carrossel-item:focus-within .item-legenda{
+    opacity:1; transform:translateY(0);
   }
 }
-@media not all and (hover:hover) and (pointer:fine){ .hero-carrossel-dica{ display:none } }
+/* NO TOQUE NÃO TEM HOVER DE VERDADE, e sem pirâmide não sobra mais "um
+   destacado por vez" pra decidir com toggle de JS — mais simples ainda:
+   os dois textos já nascem visíveis, sem JS nenhum. */
+@media not all and (hover:hover) and (pointer:fine){
+  .hero-lado-video .item-cta{ opacity:1; transform:none; pointer-events:auto }
+  .hero-lado-video .item-legenda{ opacity:1; transform:none }
+}
+/* PLAY DO HERO EM cqw, não mais o 74px/60px fixo do .video-play genérico
+   (ver a regra base, ainda usada por leque/outras seções sem
+   container-type — não mexer nela) — pedido explícito: "o botão de play
+   também estava bugado" no celular, grande demais pro cartão pequeno.
+   Escala com o PRÓPRIO cartão: no topo (maior) fica perto do tamanho de
+   sempre, na base (30% menor) encolhe junto em vez de sobrar por cima do
+   vídeo. Especificidade de 2 classes já vence a regra genérica em
+   qualquer largura, incluindo dentro do @media(max-width:720px) que
+   ainda fixa .video-play em 60px pras outras seções do site. */
+.hero-lado-video .video-play{ width:clamp(30px,17cqw,74px); height:clamp(30px,17cqw,74px) }
+.hero-lado-video .video-play svg{ width:clamp(13px,7cqw,30px); height:clamp(13px,7cqw,30px); margin-left:clamp(1px,0.9cqw,4px) }
 
 /* ==========================================================================
    A ESTANTE DO HERO — classe "carrossel" ficou pelo nome (era um trilho de
@@ -6989,73 +6793,62 @@ footer::before{ opacity:.72 }
              apontando para a explicação é o gancho; o botão é o passo
              seguinte, depois que a pessoa já viu do que se trata — não antes.
              A capa é local e o vídeo só é baixado quando a pessoa aperta o play. -->
-        <!-- ESTANTE (não "carrossel" mais — a classe/nome ficou, mas não há
-             mais scroll/arrasto nenhum aqui, ver CSS de .carrossel-trilho
-             abaixo). Os três vídeos mais importantes do site, os 3 do
-             MESMO TAMANHO, estáticos, sobrepostos — mesmo modelo do leque
-             de "formas de usar". O vídeo 1 (o que é consórcio) fica no
-             MEIO de propósito, por cima dos outros dois em repouso, e
-             qualquer um dos 3 se destaca ao passar o mouse (ligarVideoLocal
-             perto do fim do body liga o play; o destaque em si é CSS puro,
-             ver .hero-lado-video .carrossel-item:hover/.ativo). -->
-        <div class="carrossel hero-lado-video" id="heroCarrossel">
-          <div class="carrossel-trilho">
-            <div class="video-card vidro carrossel-item" id="videoCardDiferencial">
-              <button type="button" class="video-capa" id="videoPlayDiferencial" aria-label="Assistir: por que vale a pena fechar com a Astro">
-                <picture>
-                  <source type="image/webp" srcset="img/video9-capa-v2.webp">
-                  <img src="img/video9-capa-v2.jpg" width="960" height="540" alt="Apollo aponta para a palavra Diferencial: o trabalho que você não vê, mas muda o resultado" decoding="async">
-                </picture>
-                <span class="video-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
-                </span>
-              </button>
-              <!-- Sem página própria pra "diferencial" ainda (só o vídeo) —
-                   até termos esse conteúdo escrito, o botão manda pro
-                   WhatsApp com contexto, mesmo caminho já escolhido pro
-                   leque. -->
-              <span class="item-legenda">Por que vale a pena fechar com a Astro</span>
-              <a class="item-cta" href="https://wa.me/554599999999?text=Ol%C3%A1!%20Quero%20entender%20o%20diferencial%20da%20Astro%20na%20hora%20de%20fechar%20meu%20cons%C3%B3rcio." target="_blank" rel="noopener noreferrer">Diferencial <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <!-- SEM SOBREPOSIÇÃO — pedido explícito, substituindo o modelo
+             anterior (3 do mesmo tamanho, empilhados, cobrindo parte um do
+             outro). O vídeo 1 (o que é consórcio) fica sozinho em cima,
+             maior — é o gancho principal — e os outros dois ficam embaixo,
+             lado a lado, 30% menores. Cada um se destaca com o próprio
+             :hover/:focus-within, sem JS nenhum (ligarVideoLocal perto do
+             fim do body só liga o play). -->
+        <div class="hero-lado-video" id="heroCarrossel">
+          <div class="video-pilha">
+            <div class="video-linha-topo">
+              <div class="video-card vidro carrossel-item" id="videoCard">
+                <button type="button" class="video-capa" id="videoPlay" aria-label="Assistir: o que é consórcio e como ele funciona">
+                  <picture>
+                    <source srcset="img/video-capa.webp" type="image/webp">
+                    <img src="img/video-capa.jpg" width="960" height="540" alt="Apollo, o astronauta da Astro, apontando para a pergunta: o que é consórcio?" decoding="async">
+                  </picture>
+                  <span class="video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
+                  </span>
+                </button>
+                <span class="item-legenda">O que é consórcio e como ele funciona</span>
+                <a class="item-cta" href="#verdade">Como funciona <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
             </div>
-            <div class="video-card vidro carrossel-item" id="videoCard">
-              <button type="button" class="video-capa" id="videoPlay" aria-label="Assistir: o que é consórcio e como ele funciona">
-                <picture>
-                  <source srcset="img/video-capa.webp" type="image/webp">
-                  <img src="img/video-capa.jpg" width="960" height="540" alt="Apollo, o astronauta da Astro, apontando para a pergunta: o que é consórcio?" decoding="async">
-                </picture>
-                <span class="video-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
-                </span>
-              </button>
-              <span class="item-legenda">O que é consórcio e como ele funciona</span>
-              <a class="item-cta" href="#verdade">Como funciona <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div class="video-linha-base">
+              <div class="video-card vidro carrossel-item" id="videoCardDiferencial">
+                <button type="button" class="video-capa" id="videoPlayDiferencial" aria-label="Assistir: por que vale a pena fechar com a Astro">
+                  <picture>
+                    <source type="image/webp" srcset="img/video9-capa-v2.webp">
+                    <img src="img/video9-capa-v2.jpg" width="960" height="540" alt="Apollo aponta para a palavra Diferencial: o trabalho que você não vê, mas muda o resultado" decoding="async">
+                  </picture>
+                  <span class="video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
+                  </span>
+                </button>
+                <!-- Sem página própria pra "diferencial" ainda (só o vídeo) —
+                     até termos esse conteúdo escrito, o botão manda pro
+                     WhatsApp com contexto, mesmo caminho já escolhido pro
+                     leque. -->
+                <span class="item-legenda">Por que vale a pena fechar com a Astro</span>
+                <a class="item-cta" href="https://wa.me/554599999999?text=Ol%C3%A1!%20Quero%20entender%20o%20diferencial%20da%20Astro%20na%20hora%20de%20fechar%20meu%20cons%C3%B3rcio." target="_blank" rel="noopener noreferrer">Diferencial <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
+              <div class="video-card vidro carrossel-item" id="videoCardAtendimento">
+                <button type="button" class="video-capa" id="videoPlayAtendimento" aria-label="Assistir: como falar com a gente, do seu jeito">
+                  <picture>
+                    <source type="image/webp" srcset="img/video10-capa.webp">
+                    <img src="img/video10-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Do seu jeito: WhatsApp, vídeo ou presencial" decoding="async">
+                  </picture>
+                  <span class="video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
+                  </span>
+                </button>
+                <span class="item-legenda">Como falar com a gente, do seu jeito</span>
+                <a class="item-cta" href="#onde-estamos">Atendimento <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
             </div>
-            <div class="video-card vidro carrossel-item" id="videoCardAtendimento">
-              <button type="button" class="video-capa" id="videoPlayAtendimento" aria-label="Assistir: como falar com a gente, do seu jeito">
-                <picture>
-                  <source type="image/webp" srcset="img/video10-capa.webp">
-                  <img src="img/video10-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Do seu jeito: WhatsApp, vídeo ou presencial" decoding="async">
-                </picture>
-                <span class="video-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
-                </span>
-              </button>
-              <span class="item-legenda">Como falar com a gente, do seu jeito</span>
-              <a class="item-cta" href="#onde-estamos">Atendimento <svg class="seta" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-          <!-- PONTOS: os 3 cartões já ficam todos visíveis, estáticos, lado
-               a lado — não tem "arrastar" nenhum aqui (ver comentário
-               grande acima de .hero-lado-video .carrossel-trilho). Eles só
-               dizem "são 3" e dão um jeito de destacar um por CLIQUE/toque,
-               sem precisar de mouse: no toque não existe :hover de
-               verdade, então sem isso o toque não teria como puxar um
-               cartão pra frente (mesmo papel do clique no leque, ver JS). -->
-          <p class="hero-carrossel-dica" id="heroCarrosselDica" aria-hidden="true">passe o mouse para destacar</p>
-          <div class="hero-carrossel-pontos" role="tablist" aria-label="Destacar vídeo">
-            <button type="button" class="ponto" role="tab" aria-label="Vídeo 1: por que a Astro"></button>
-            <button type="button" class="ponto" role="tab" aria-label="Vídeo 2: o que é consórcio" aria-selected="true"></button>
-            <button type="button" class="ponto" role="tab" aria-label="Vídeo 3: como falar com a gente"></button>
           </div>
         </div>
 
@@ -8342,107 +8135,12 @@ document.addEventListener('DOMContentLoaded', function () {
     aria: 'O que é consórcio, explicado por Apollo, narrado', midia: 'video-verdade'
   });
 
-  /* HERO: a APARÊNCIA do destaque (crescer, ir pro topo, sombra) é CSS
-     puro (.carrossel-item.ativo), mas QUEM ganha .ativo com o mouse virou
-     JS — ver o comentário grande em ".hero-lado-video .carrossel-item.ativo"
-     pro motivo. Resumo: bug real visto ao vivo — "se estou no quadro da
-     direita e quero ir para o do meio fica difícil": com o vizinho
-     destacado crescendo 15% por cima (z-index:50), a fatia do cartão do
-     meio que não está coberta por ninguém quase some, e ':hover' comum só
-     enxerga quem está desenhado por cima naquele pixel — nunca o de baixo.
-     A troca: 'mousemove' no trilho mede o CENTRO de cada cartão (fixo,
-     scale() não desloca centro) e destaca sempre o mais PERTO do cursor
-     (distância 2D, X e Y — os 3 não ficam mais na mesma altura depois da
-     pirâmide, ver --desce em .carrossel-trilho), ignorando o que está por
-     cima visualmente naquele ponto —
-     mover a direção do cartão do meio agora sempre o traz pra frente,
-     mesmo saindo de cima do vizinho grande. Só liga em quem tem mouse de
-     verdade (mqPonteiro); toque continua pelo clique/toque de sempre. */
-  (function(){
-    var raiz = document.getElementById('heroCarrossel');
-    if (!raiz) return;
-    var trilho = raiz.querySelector('.carrossel-trilho');
-    if (!trilho) return;
-    var itens = Array.prototype.slice.call(trilho.querySelectorAll('.carrossel-item'));
-    var pontos = Array.prototype.slice.call(
-      document.querySelectorAll('.hero-carrossel-pontos .ponto')
-    );
-    var mqPonteiro = window.matchMedia('(hover:hover) and (pointer:fine)');
-    function destacar(item){
-      itens.forEach(function(it){ it.classList.remove('ativo'); });
-      if (item) item.classList.add('ativo');
-      var i = itens.indexOf(item);
-      pontos.forEach(function(p, pi){ p.setAttribute('aria-selected', pi === i ? 'true' : 'false'); });
-    }
-    /* toque: mesma mecânica do leque — tocar liga .ativo, tocar de novo
-       desliga. CAPTURA (true), não bolha: tocar direto no botão de play
-       dispara ligarVideoLocal, que troca o <button> por um <video>
-       (b.replaceWith(v)) DENTRO do mesmo clique — na fase de bolha o
-       e.target (o botão) já está desconectado do documento nesse ponto,
-       e e.target.closest(...) sempre voltava null (bug real: tocar o
-       play tocava o vídeo mas o cartão nunca destacava). Capturar ANTES
-       do clique chegar no botão resolve, porque roda antes dele trocar
-       de lugar. SÓ pra quem não tem mouse de verdade — em quem tem, o
-       mousemove abaixo já mantém o destaque ligado o tempo todo enquanto
-       o cursor está em cima, e esse toggle desligaria ele bem na hora do
-       clique (o cursor continua ali, mas .ativo cairia por um instante). */
-    trilho.addEventListener('click', function(e){
-      if (mqPonteiro.matches) return;
-      var item = e.target.closest('.carrossel-item');
-      if (!item) return;
-      destacar(item.classList.contains('ativo') ? null : item);
-    }, true);
-    // ponto: o mesmo destaque, sem precisar tocar o cartão
-    pontos.forEach(function(p, i){
-      p.addEventListener('click', function(){ destacar(itens[i]); });
-    });
-    /* mouse de verdade: destaca sempre o cartão cujo CENTRO geométrico
-       está mais perto do cursor — ver o comentário grande acima
-       (.carrossel-item.ativo) pro motivo de não usar ':hover' direto.
-       Distância em X e Y (não só X): desde a pirâmide (ver --desce em
-       .carrossel-trilho) os 3 cartões não nascem mais na mesma altura —
-       só X faria o cursor "grudar" no cartão de cima mesmo descendo em
-       direção a uma das pontas, porque X sozinho não enxerga a diferença
-       vertical entre eles. */
-    /* SÓ ENTRA NA CONTA QUEM REALMENTE TEM O CURSOR EM CIMA — bug real visto
-       ao vivo depois que os 3 cartões cresceram (pirâmide maior, mais
-       sobreposição em px): "estou com o mouse em cima de um vídeo mas sem
-       conseguir pausar", porque a conta de "centro mais perto" (ver
-       comentário grande acima) IGNORAVA se o cursor estava dentro do
-       retângulo do cartão ou não — perto da barra de controles nativa
-       (embaixo do vídeo, região que às vezes cai mais perto do centro do
-       VIZINHO que do próprio, principalmente nas pontas da pirâmide, que
-       nascem descidas) um vizinho virava .ativo (z-index:50) por cima do
-       vídeo que o usuário queria clicar, roubando o clique do play/pause
-       nativo. Fix: filtra pra só considerar quem CONTÉM o cursor (getBounding
-       ClientRect, o retângulo de verdade do cartão) antes de medir distância
-       de centro — a distância de centro continua decidindo o empate quando
-       MAIS DE UM cartão contém o ponto (a zona de sobreposição entre eles,
-       onde o truque original ainda é necessário pra sair de cima do vizinho
-       ativo e voltar pro do meio), mas nunca mais escolhe um cartão que o
-       cursor nem está tocando. */
-    function contemCursor(r, x, y){
-      return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-    }
-    if (mqPonteiro.matches){
-      trilho.addEventListener('mousemove', function(e){
-        var alvo = null, menorDist = Infinity;
-        itens.forEach(function(it){
-          var r = it.getBoundingClientRect();
-          if (!contemCursor(r, e.clientX, e.clientY)) return;
-          var dx = e.clientX - (r.left + r.width / 2);
-          var dy = e.clientY - (r.top + r.height / 2);
-          var d = dx*dx + dy*dy;
-          if (d < menorDist){ menorDist = d; alvo = it; }
-        });
-        // nenhum cartão sob o cursor (ex.: vão entre os dois de baixo): não
-        // mexe no destaque atual, só sai quando o mouse sai do trilho de vez
-        // (mouseleave abaixo) — evita picar o destaque ao cruzar essas frestas.
-        if (alvo && !alvo.classList.contains('ativo')) destacar(alvo);
-      });
-      trilho.addEventListener('mouseleave', function(){ destacar(null); });
-    }
-  })();
+  /* HERO: os vídeos não se sobrepõem mais (topo maior + base com 2
+     menores, lado a lado), então o destaque virou CSS puro (:hover/
+     :focus-within em .carrossel-item, ver a regra logo dela) — não
+     precisa mais de JS medindo centro/distância pra decidir qual cartão
+     "ganha" o mouse (isso já causou bug de hitbox quando eram
+     sobrepostos; sem sobreposição o problema nem existe mais). */
 
   /* LEQUE: grade 3×2, nada pra rolar ou arrastar (ver comentário grande em
      .leque-trilho) — o destaque em si (crescer, ir pro topo) é TODO CSS,
@@ -8507,85 +8205,35 @@ document.addEventListener('DOMContentLoaded', function () {
          do palco que não é o nav (clamp 28-72) + padding-bottom (clamp
          28-64) + os DOIS gaps do grid .hero-grade (44 cada em telas
          largas) + o margin-top PRÓPRIO do .hero-acao (clamp 22-32,
-         SOMA com o gap do grid, não substitui) = 233px.
+         SOMA com o gap do grid, não substitui) = 233px — essa parte não
+         mudou, é tudo ACIMA/AO REDOR da pilha de vídeos.
 
-         + pontos e dica (fluxo normal abaixo da fileira), medido ao
-         vivo: ~17px da linha de pontos (com margin-top) + ~31px do
-         texto da dica (com margin-top) = 48px.
+         + o que É novo: a pilha agora é DUAS fileiras empilhadas (topo +
+         base), não mais 3 cartões sobrepostos, então o custo fixo da
+         pilha em si mudou. --gap-v (o espaço REAL entre as fileiras,
+         que substituiu o antigo overlap/--desce) = 14px. + o padding
+         PRÓPRIO de cada .video-card que NÃO é o vídeo 16:9 (14px cada
+         lado = 28px), contado DUAS VEZES porque agora há duas fileiras
+         de cartão (o padding da fileira de cima e o padding da fileira
+         de baixo são independentes — 2×28 = 56px.
 
-         + o próprio miolo do cartão que NÃO é o vídeo 16:9: só o padding
-         PRÓPRIO do .video-card (14px cada lado na faixa 1025-1599px,
-         onde --video-teto costuma apertar mais — acima de 1600px sobe
-         pra 16px, mas aí normalmente já tem altura de sobra — 28px). A
-         legenda "Explicação de N segundos" que morava aqui foi REMOVIDA
-         do Hero (pedido explícito — "essa informação nem é tão
-         relevante... se atrapalhar pode tirar"; era ela, quebrando em 2
-         linhas num cartão pequeno, que causou o bug real medido ao vivo
-         num notebook baixo, 1025x700: o CTA saía 55px da dobra).
-
-         + os "+4px" de cada lado que .carrossel-trilho reserva a mais no
-         padding vertical (ver o comentário lá — cobrem esse mesmo
-         padding do cartão crescendo no :hover/.ativo) = 8px.
-
-         233+48+28+8 = 317px na conta em teoria — só que essa conta soma
-         o PIOR CASO de cada peça, e na prática as peças não ficam no pior
-         caso todas ao mesmo tempo (ex.: os "44" dos dois gaps do grid são
-         o teto do clamp, não o valor típico). Medido ao vivo com 317: em
-         1920x1080 sobravam 54px inteiros abaixo do botão (CTA bem longe
-         da dobra) — espaço real que dava pra devolver pro cartão. Descido
-         pra 280, e mais uma rodada depois ("aumente o máximo possível sem
-         prejudicar"): em 1920x1080 sobravam 15px com 280 — baixado pra 276
-         pra devolver mais 4px mantendo ~11px de folga real (1920x1080 é
-         quem trava esse número pra baixo: é a tela testada com MENOS sobra
-         relativa, ver o --piso logo abaixo pra quem tem sobra de verdade). */
-      var folga = 276;
-      /* PISO subiu de 130 pra 142 pela mesma rodada: 1366x768 (a resolução
-         de notebook mais comum, e a mais apertada nesse piso) tinha 22px de
-         sobra sem uso — o piso existia pra proteger a legibilidade, não pra
-         parar 12px abaixo do que cabe de verdade. Medido de novo depois de
-         subir: 1366x768 fecha com ~11px de sobra (mesma margem de segurança
-         de antes, não zero), 1280x800 sobra 33px, 1440x900 sobra 24px.
-
-         TROCA ACEITA, não escondida: esse piso mais alto também vale pra
-         janelas mais baixas que 768px de altura, e uma delas realmente
-         piora — 1280x720 (não estava no lote de testes original, que usava
-         1280x900) já estourava a dobra em 20px MESMO no piso antigo; no
-         piso novo (142) estoura ~32px. Não achei como fechar esse caso sem
-         piorar 1366x768 (o piso é UM número só pros dois) ou cortar algo
-         real do layout (nav/texto/respiro) — decisão consciente: privilegiar
-         a resolução mais comum, não a mais rara. Se 1280x720 for um público
-         real do site, o piso aqui é o primeiro número a revisar.
-
-         PISO TENTOU SUBIR pra 270 numa rodada da pirâmide, achando que
-         devolvia o tamanho de cartão de antes — ERRADO, e revertido:
-         --video-teto é a altura TOTAL do trilho (padding + cartão +
-         --desce), não só o cartão, então subir o piso sobe o TRILHO
-         inteiro, e em 1366x768 (a própria resolução que define esse piso)
-         não HÁ 270px de sobra de verdade — virava -121px de estouro na
-         dobra, medido ao vivo. --video-teto natural nessa resolução é só
-         uns 149px (bem perto do piso antigo de 142), e nenhum valor de
-         piso muda isso: o piso só importa pra janelas AINDA mais baixas
-         que 1366x768. O jeito certo de não deixar o cartão desabar foi
-         gastar MENOS orçamento por pirâmide (--desce sozinho, sem --sobe
-         nem padding dobrado — ver o comentário grande de .hero-lado-video
-         e o transform-origin do nth-child(2)), não subir o piso.
-
-         PISO SUBIU DE VERDADE AGORA, pra 167 — pedido explícito "aumente
-         os tamanhos" dos 3 cartões, com duas condições: o do meio não
-         tampar o título dos vizinhos, e os dois de baixo não se
-         encostarem. As DUAS condições são sobre --f/--desce/margin-left
-         (frações do próprio cartão) e não mudam com o piso — escalar
-         --video-teto pra cima escala a pirâmide inteira mantendo essas
-         frações, medido ao vivo: a folga entre o cartão do meio e o
-         título do vizinho cresce junto (14px→18px), o vão entre os dois
-         cartões de baixo também (27px→33px). O único custo real de subir
-         o piso é a MESMA dobra de 1366x768 que travou a tentativa do 270:
-         dessa vez escolhido com a conta oposta — 167 é o valor que deixa
-         o botão final ~15px abaixo da dobra SÓ nessa resolução (rolagem
-         de 1-2 "clicks" de mouse), escala aceita explicitamente em troca
-         de cartões ~18% maiores. Janelas com --video-teto natural maior
-         que 167 (a maioria acima de 1366x768) nem notam o piso — só quem
-         já batia nele antes. */
+         233 + 14 + 56 = 303px. Sem mais pontos/dica (removidos, não
+         fazem sentido sem um cartão "destacado" único) nem reserva pra
+         hover crescendo por escala (o hover novo só desloca -4px pra
+         cima, não precisa de padding extra pros dois lados). Valor
+         teórico — ainda por confirmar/ajustar contra medição ao vivo
+         nas resoluções críticas (ver --piso abaixo). */
+      var folga = 303;
+      /* PISO: valor de segurança pra quando --video-teto natural (o que
+         sobra de verdade na tela) for pequeno demais pra manter a pilha
+         legível — trava um mínimo em troca de rolar um pouco em telas
+         baixas. Como a fórmula de largura mudou por completo (antes era
+         --video-teto usado quase direto pela pirâmide; agora é
+         --video-teto × 1.4641 virando a largura MÁXIMA da pilha, ver
+         .hero-lado-video), o piso antigo (167, calibrado pra pirâmide)
+         não tem relação com o número certo aqui — precisa de nova
+         calibração ao vivo em 1366x768 (a resolução que historicamente
+         define esse número nesse Hero) antes de virar definitivo. */
       var sobra = Math.max(167, window.innerHeight - usado - folga);
       raiz.style.setProperty('--video-teto', sobra + 'px');
     }
