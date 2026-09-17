@@ -248,7 +248,8 @@ exports.handler = async function (event) {
      armazenamento respondeu. Nenhum valor de chave, token ou id sai daqui. */
   if (acao === 'diagnostico') {
     const c = contextoBlobs();
-    const r = { contextoInjetado: !!process.env.NETLIFY_BLOBS_CONTEXT,
+    const r = { versao: 'agenda-blobs-site-v2',
+                contextoInjetado: !!process.env.NETLIFY_BLOBS_CONTEXT,
                 tokenProprio: !!process.env.NETLIFY_TOKEN,
                 siteIdProprio: !!process.env.NETLIFY_SITE_ID,
                 senhaDefinida: !!process.env.AGENDA_SENHA,
