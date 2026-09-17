@@ -6456,6 +6456,147 @@ footer::before{ opacity:.72 }
 .video-alt a, .consent a, .consent-txt a{
   display:inline-block; padding:4px 2px; min-height:24px; line-height:16px;
 }
+
+/* Variante de avaliação: vídeos em uma fileira e navegação sem sobreposição. */
+nav .nav-inner{grid-template-columns:auto minmax(0,1fr) auto;gap:24px;padding-inline:24px}
+nav .nav-logo{flex-shrink:0;width:max-content}
+nav .nav-links{gap:clamp(14px,1.3vw,24px);margin:0;padding:0;justify-self:center}
+nav .nav-links a{white-space:nowrap;font-size:14px!important;padding:8px 0!important}
+nav .nav-cta{font-size:14px!important;padding:12px 18px!important}
+nav .nav-acao{justify-self:end;flex-shrink:0}
+@media(min-width:761px){
+ .hero-inner{width:calc(100% - clamp(44px,6vw,160px));max-width:none}
+ .hero-grade{width:100%;min-width:0}
+ .hero-lado-video{max-width:none;width:100%}
+ .video-pilha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ .video-linha-topo,.video-linha-base{display:contents}
+ .video-linha-topo .carrossel-item,.video-linha-base .carrossel-item{width:100%;min-width:0}
+ .hero-grade{gap:28px}
+ .hero-acao{margin-top:4px;align-items:center}
+ .hero-acao .hero-microcopy{justify-content:center}
+}
+@media(max-width:1399px){
+ nav .nav-inner{grid-template-columns:auto 1fr auto;gap:14px}
+ nav .nav-links{display:none}
+ nav .nav-acao{grid-column:2;grid-row:1}
+ nav .nav-burger{display:flex;grid-column:3;grid-row:1}
+}
+@media(max-width:760px){
+ .hero-lado-video{width:100%;max-width:none}
+ .video-pilha{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+ .video-linha-topo,.video-linha-base{display:contents}
+ .video-linha-topo .carrossel-item,.video-linha-base .carrossel-item{width:100%;min-width:0}
+ nav .nav-inner{padding-inline:14px;gap:8px}
+ nav .nav-logo{height:36px!important;gap:7px}
+ nav .nav-acao{gap:8px}
+ nav .nav-cta{display:none}
+}
+@media(max-width:360px){
+ nav .nav-inner{padding-inline:10px;gap:6px}
+ nav .nav-logo{height:30px!important;gap:5px}
+ nav .nav-acao{gap:5px}
+ nav .tema-btn,nav .busca-btn,nav .nav-burger{width:36px;height:36px;min-width:36px}
+}
+
+</style>
+<style>
+html{scroll-padding-top:112px}
+section[id],main[id]{scroll-margin-top:112px}
+nav{z-index:300!important}
+.nav-painel{z-index:299!important;max-height:calc(100dvh - 78px)!important;overflow-y:auto!important;overscroll-behavior:contain}
+/* No celular, leitura vertical. No computador, as três modalidades ficam na
+   mesma linha para reduzir a rolagem e impedir a sobra 2 + 1. */
+#estruturas .modal-grid{grid-template-columns:1fr}
+@media(min-width:900px){
+  #estruturas .modal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* Ajustes finais de conversao e leitura. */
+@media(min-width:761px){
+  .hero-palco{padding-bottom:clamp(18px,2.5vh,32px)}
+  #calculadora{padding-top:12px}
+}
+
+/* Protege o subtitulo do reflexo claro da fita no celular. */
+@media(max-width:720px){
+  .hero-sub{
+    position:relative; z-index:2; padding:12px 14px; border-radius:16px;
+    backdrop-filter:blur(10px) saturate(125%);
+    -webkit-backdrop-filter:blur(10px) saturate(125%);
+  }
+  :root[data-tema="escuro"] .hero-sub{
+    color:#DCE7F6; background:rgba(4,9,20,.7);
+    box-shadow:0 10px 28px rgba(2,5,12,.26), inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  :root[data-tema="claro"] .hero-sub{
+    color:#24364D; background:rgba(255,255,255,.78);
+    box-shadow:0 10px 28px rgba(25,45,75,.12), inset 0 0 0 1px rgba(10,33,70,.08);
+  }
+  .whatsapp-float,.ao-topo{display:none!important}
+}
+@media(max-width:720px) and (prefers-color-scheme:light){
+  :root:not([data-tema="escuro"]) .hero-sub{
+    color:#24364D; background:rgba(255,255,255,.78);
+    box-shadow:0 10px 28px rgba(25,45,75,.12), inset 0 0 0 1px rgba(10,33,70,.08);
+  }
+}
+
+/* A escolha feita na calculadora agora continua no formulario. */
+.simulador-controle .calc-cta{
+  display:inline-flex; grid-column:1/-1; justify-self:center; margin-top:4px;
+}
+.calc-comparacao-aviso{
+  grid-column:1/-1; display:flex; gap:10px; align-items:flex-start;
+  padding:14px 16px; border-radius:14px; color:var(--text-2);
+  background:rgba(127,212,255,.08); border:1px solid var(--accent-line);
+  font-size:14px; line-height:1.55;
+}
+.calc-comparacao-aviso[hidden]{display:none}
+.calc-comparacao-aviso strong{color:var(--text)}
+.comp-lados.sem-comparacao{grid-template-columns:minmax(0,1fr)}
+
+/* Diferenciais verificaveis, sem citar administradoras ou inventar numeros. */
+#diferencial-astro{padding:clamp(54px,7vw,88px) 0}
+.diferencial-grid{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(14px,1.8vw,22px);
+}
+.diferencial-card{padding:clamp(22px,2.5vw,30px);border-radius:var(--r-l)}
+.diferencial-num{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  margin-bottom:18px;font-family:var(--f-mono);font-size:12px;font-weight:700;
+  color:#04101F;background:linear-gradient(145deg,#FFFFFF,#8EDCFF);
+  box-shadow:0 8px 24px rgba(59,143,224,.22);
+}
+.diferencial-card h3{font-size:clamp(20px,2vw,26px);margin:0 0 10px}
+.diferencial-card p{color:var(--text-2);font-size:15px;line-height:1.65;margin:0}
+.confianca-faixa{
+  margin-top:clamp(18px,2.4vw,28px);padding:18px clamp(18px,2.4vw,28px);
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;
+  border-radius:var(--r-l);border:1px solid var(--line);
+  background:linear-gradient(145deg,rgba(147,169,201,.06),rgba(147,169,201,.015));
+}
+.confianca-item{display:flex;gap:10px;align-items:flex-start;color:var(--text-2);font-size:13.5px;line-height:1.5}
+.confianca-item svg{width:20px;height:20px;flex:none;color:var(--accent-hi)}
+.confianca-item strong{display:block;color:var(--text);font-size:14px}
+
+/* No celular, dois casos aparecem de imediato; os demais abrem sob demanda. */
+.leque-toggle{display:none}
+@media(max-width:1023px){
+  #lequeCarrossel:not(.expandido) .leque-fileira:first-child .leque-card:nth-child(3),
+  #lequeCarrossel:not(.expandido) .leque-fileira:nth-child(2){display:none}
+  .leque-toggle{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:calc(100% - 32px);max-width:430px;margin:20px auto 0;
+    padding:14px 18px;border-radius:100px;border:1px solid var(--accent-line);
+    color:var(--text);background:rgba(147,169,201,.07);font:700 14px var(--f-text);
+    cursor:pointer;
+  }
+  .leque-toggle svg{width:17px;height:17px;transition:transform .3s var(--ease)}
+  #lequeCarrossel.expandido .leque-toggle svg{transform:rotate(180deg)}
+  #diferencial-astro{padding:52px 0}
+  .diferencial-grid,.confianca-faixa{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -6744,6 +6885,7 @@ footer::before{ opacity:.72 }
      mente para o leitor de tela. -->
 <div class="nav-painel" id="navPainel" role="dialog" aria-label="Menu de navegação">
     <ul>
+      <li><a href="#main">Página inicial</a></li>
       <li><a href="#verdade">Como Funciona</a></li>
       <li><a href="#estruturas">Modalidades</a></li>
       <li><a href="#simular">Vídeo</a></li>
@@ -6784,7 +6926,7 @@ footer::before{ opacity:.72 }
             <span class="linha" data-split>Enquanto você decide, o tempo corre.</span>
             <span class="linha brilho">Comece a construir patrimônio.</span>
           </h1>
-          <p class="hero-sub">Parcela previsível, <span class="marca-caramelo">custo conhecido desde o primeiro dia</span>. E alguém do seu lado em cada decisão — a diferença de comprar com a Astro em vez de ir direto na administradora.</p>
+          <p class="hero-sub">Mais que escolher uma carta: <span class="marca-caramelo">análise de grupo, estratégia de lance e acompanhamento</span>. A Astro ajuda você a entender os custos e decidir cada etapa do seu consórcio.</p>
         </div>
 
         <!-- O VÍDEO VEM ANTES DOS BOTÕES, e não depois. Ele estava entre o
@@ -6859,12 +7001,12 @@ footer::before{ opacity:.72 }
               Falar com um especialista
             </a>
             <a href="#form-simulador" class="btn btn-fantasma" onclick="rastrear('InitiateCheckout')">
-              Quero minha simulação exata
+              Quero minha simulação personalizada
               <svg class="seta" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
           <p class="hero-microcopy">
-            <span class="selo">Simulação gratuita</span><span class="selo-sep" aria-hidden="true"></span><span class="selo">Sem consulta ao SPC/Serasa</span><span class="selo-sep" aria-hidden="true"></span><span class="selo">Resposta no mesmo dia</span>
+            <span class="selo">Simulação gratuita</span><span class="selo-sep" aria-hidden="true"></span><span class="selo">Sem consulta ao SPC/Serasa</span><span class="selo-sep" aria-hidden="true"></span><span class="selo">Retorno o mais breve possível</span>
           </p>
         </div>
       </div>
@@ -6897,11 +7039,12 @@ footer::before{ opacity:.72 }
         </div>
         <label class="calc-label" for="calcValor">Valor do bem que você quer</label>
         <div class="calc-valor" id="calcValorTexto">R$ 300.000</div>
-        <input type="range" id="calcValor" min="100000" max="2000000" step="10000" value="300000"
+        <input type="range" id="calcValor" min="50000" max="2000000" step="10000" value="300000"
                aria-label="Valor do crédito desejado">
-        <div class="calc-escala"><span>R$ 100 mil</span><span>R$ 2 mi</span></div>
+        <div class="calc-escala"><span>R$ 50 mil</span><span>R$ 2 mi</span></div>
         <p class="calc-dica" id="calcDica">◀ &nbsp;arraste ou toque num valor&nbsp; ▶</p>
         <div class="calc-atalhos">
+          <button type="button" data-v="50000">50 mil</button>
           <button type="button" data-v="150000">150 mil</button>
           <button type="button" data-v="300000">300 mil</button>
           <button type="button" data-v="500000">500 mil</button>
@@ -6924,6 +7067,11 @@ footer::before{ opacity:.72 }
             <div class="res-item"><span>Reajuste anual</span><b id="resIndice">INCC</b></div>
             <div class="res-item res-banco"><span>No banco seria</span><b id="resBanco">R$ 4.318</b></div>
           </div>
+        </div>
+
+        <div class="calc-comparacao-aviso" id="calcComparacaoAviso" role="note" hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg>
+          <span><strong>Comparação bancária sob consulta.</strong> Em maquinário, juros, seguros e condições mudam conforme a linha rural ou industrial, o bem e o perfil da empresa. Por isso, mostramos aqui apenas a estimativa do consórcio até recebermos os parâmetros do seu caso.</span>
         </div>
 
         <div class="calc-barras">
@@ -6995,7 +7143,7 @@ footer::before{ opacity:.72 }
           <strong id="calcEcon" data-eco>R$ 162.494</strong>
         </div>
 
-        <a href="#form-simulador" class="btn btn-primario btn-largo calc-cta" onclick="rastrear('InitiateCheckout')">Quero minha simulação exata</a>
+        <a href="#form-simulador" id="calcParaForm" class="btn btn-primario btn-largo calc-cta" onclick="rastrear('InitiateCheckout')">Continuar com estes valores</a>
       </div>
 
       <div class="simulador-emenda" aria-hidden="true"><span></span></div>
@@ -7063,11 +7211,11 @@ footer::before{ opacity:.72 }
           </div>
           <div class="form-passo">
             <span class="form-passo-num">2</span>
-            <p>A gente mostra <strong>o valor e a parcela estimada</strong> na hora.</p>
+            <p>Você envia suas escolhas pelo <strong>WhatsApp</strong> para iniciar o atendimento.</p>
           </div>
           <div class="form-passo">
             <span class="form-passo-num">3</span>
-            <p>Você fala com <strong>um especialista pelo WhatsApp</strong> pra montar a estratégia.</p>
+            <p>Um especialista prepara <strong>sua simulação personalizada</strong> e orienta a estratégia de lance.</p>
           </div>
         </div>
 
@@ -7117,6 +7265,8 @@ footer::before{ opacity:.72 }
                 <label class="so-leitor" for="valor">Crédito estimado</label>
                 <select id="valor" class="so-leitor" required tabindex="-1" aria-hidden="true">
                   <option value="" disabled selected>Crédito Estimado</option>
+                  <option value="50-100">R$ 50 mil - R$ 100 mil</option>
+                  <option value="100-200">R$ 100 mil - R$ 200 mil</option>
                   <option value="200-300">R$ 200 mil - R$ 300 mil</option>
                   <option value="300-600">R$ 300 mil - R$ 600 mil</option>
                   <option value="600-1m">R$ 600 mil - R$ 1 Milhão</option>
@@ -7125,6 +7275,8 @@ footer::before{ opacity:.72 }
                 </select>
                 <p class="pergunta-cartoes">Crédito estimado</p>
                 <div class="escolha-grid" role="group" aria-label="Crédito estimado">
+                  <button type="button" class="escolha-cartao" data-alvo="valor" data-valor="50-100" aria-pressed="false"><span>R$ 50 mil - R$ 100 mil</span></button>
+<button type="button" class="escolha-cartao" data-alvo="valor" data-valor="100-200" aria-pressed="false"><span>R$ 100 mil - R$ 200 mil</span></button>
                   <button type="button" class="escolha-cartao" data-alvo="valor" data-valor="200-300" aria-pressed="false">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 18V14"/><path d="M11 18V10" opacity=".25"/><path d="M16 18V6" opacity=".15"/></svg>
                     <span>R$ 200 mil - R$ 300 mil</span>
@@ -7221,8 +7373,8 @@ footer::before{ opacity:.72 }
               <div class="form-step" id="step-4">
                 <div class="form-ok">
                   <div class="form-ok-marca" aria-hidden="true">✓</div>
-                  <h3>Recebemos seus dados</h3>
-                  <p>Abrimos o WhatsApp para você enviar a mensagem. Assim que ela chegar, respondemos <strong class="marca">no mesmo dia</strong>.</p>
+                  <h3>Envie sua mensagem para concluir</h3>
+                  <p>No WhatsApp, toque em enviar para concluir seu contato. Assim que recebermos sua mensagem, nossa equipe responderá <strong class="marca">o mais breve possível</strong>.</p>
                   <p class="menor">Não abriu? <a class="inline" href="https://wa.me/554599999999">toque aqui</a>.</p>
                   <p class="menor" style="margin-top:18px">Prefere conversar com calma? A reunião por vídeo leva
                     cerca de uma hora e também não custa nada.</p>
@@ -7233,6 +7385,51 @@ footer::before{ opacity:.72 }
               </div>
   
             </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- O diferencial em entregas concretas: reforca valor sem expor parceiros. -->
+<section id="diferencial-astro">
+  <div class="container">
+    <div class="sec-head centro rv">
+      <div class="eyebrow">O trabalho por trás da escolha</div>
+      <h2 class="section-title">O que muda quando a <span>Astro acompanha</span></h2>
+      <p class="section-sub centro">Você recebe orientação para decidir com números, entender os riscos e ajustar a estratégia ao longo do plano.</p>
+    </div>
+
+    <div class="diferencial-grid stag">
+      <article class="diferencial-card vidro">
+        <span class="diferencial-num" aria-hidden="true">01</span>
+        <h3>Análise antes da escolha</h3>
+        <p>Organizamos objetivo, crédito, prazo e capacidade de parcela para buscar uma estrutura coerente com o seu planejamento.</p>
+      </article>
+      <article class="diferencial-card vidro">
+        <span class="diferencial-num" aria-hidden="true">02</span>
+        <h3>Estratégia de lance</h3>
+        <p>Comparamos cenários de lance próprio e embutido, explicando o impacto de cada alternativa no crédito disponível.</p>
+      </article>
+      <article class="diferencial-card vidro">
+        <span class="diferencial-num" aria-hidden="true">03</span>
+        <h3>Acompanhamento contínuo</h3>
+        <p>Depois da adesão, você continua com apoio para interpretar assembleias, rever a estratégia e tomar as próximas decisões.</p>
+      </article>
+    </div>
+
+    <div class="confianca-faixa rv" aria-label="Compromissos de confiança da Astro">
+      <div class="confianca-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+        <span><strong>Cálculo explicado</strong>Custos, hipóteses e limitações ficam visíveis antes da decisão.</span>
+      </div>
+      <div class="confianca-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span><strong>Sem promessa de contemplação</strong>O prazo depende de sorteio, lance e regras de cada grupo.</span>
+      </div>
+      <div class="confianca-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V9m12 11V9M3 9h18L12 3Z"/></svg>
+        <span><strong>Estrutura regulada</strong>O contrato é celebrado com administradora fiscalizada pelo Banco Central.</span>
       </div>
     </div>
   </div>
@@ -7426,7 +7623,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.2"/><circle cx="12" cy="12" r="2.6"/><path d="M6.5 9v.01M17.5 15v.01"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video2-capa.webp">
-                <img src="img/video2-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Renda mais: use a carta de crédito no lugar do dinheiro à vista" decoding="async">
+                <img src="img/video2-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Renda mais: use a carta de crédito no lugar do dinheiro à vista" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7447,7 +7644,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V7M12 20v-9M20 20v-4"/><path d="M17 3.5h4v4"/><path d="M21 3.5l-6 6-3-3-5 5"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video3-capa.webp">
-                <img src="img/video3-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Pague menos: quite o saldo com o consórcio e pague só taxa de administração" decoding="async">
+                <img src="img/video3-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Pague menos: quite o saldo com o consórcio e pague só taxa de administração" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7468,7 +7665,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 16.5 5 11.2a2 2 0 0 1 1.9-1.4h10.2a2 2 0 0 1 1.9 1.4l1.5 5.3"/><rect x="3" y="16.5" width="18" height="3.5" rx="1.3"/><circle cx="7.5" cy="20" r="1.3"/><circle cx="16.5" cy="20" r="1.3"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video4-capa.webp">
-                <img src="img/video4-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Troque fácil: use o carro atual como parte do lance e complete com a carta de crédito" decoding="async">
+                <img src="img/video4-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Troque fácil: use o carro atual como parte do lance e complete com a carta de crédito" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7491,7 +7688,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h12v-9.8"/><rect x="10" y="14" width="4" height="6"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video5-capa.webp">
-                <img src="img/video5-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Imóvel rende: alugue antes de morar nele e o aluguel ajuda a pagar a parcela" decoding="async">
+                <img src="img/video5-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Imóvel rende: alugue antes de morar nele e o aluguel ajuda a pagar a parcela" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7512,7 +7709,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13M17 9l-3-3M17 9l-3 3"/><path d="M20 15H7M7 15l3-3M7 15l3 3"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video6-capa.webp">
-                <img src="img/video6-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Venda a cota: negocie com ágio antes do fim do grupo" decoding="async">
+                <img src="img/video6-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Venda a cota: negocie com ágio antes do fim do grupo" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7533,7 +7730,7 @@ footer::before{ opacity:.72 }
               <span class="leque-selo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8.5" width="18" height="11.5" rx="2"/><path d="M8.5 8.5V6.3a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2.2"/><path d="M3 13.2h18"/></svg></span>
               <picture>
                 <source type="image/webp" srcset="img/video7-capa.webp">
-                <img src="img/video7-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Vire caixa: use a carta como capital de giro sem ser um empréstimo" decoding="async">
+                <img src="img/video7-capa.jpg" width="960" height="540" alt="Apollo aponta para a frase Vire caixa: use a carta como capital de giro sem ser um empréstimo" loading="lazy" decoding="async">
               </picture>
               <span class="video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
@@ -7550,6 +7747,10 @@ footer::before{ opacity:.72 }
           </div>
          </div>
         </div>
+        <button type="button" class="leque-toggle" id="lequeToggle" aria-expanded="false" aria-controls="lequeCarrossel">
+          <span>Ver outras formas de usar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
       </div>
     </div>
 </section>
@@ -7594,7 +7795,7 @@ footer::before{ opacity:.72 }
           <svg viewBox="0 0 24 24" style="width:24px;height:24px;fill:#2EDB70"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Z"/></svg>
         </div>
         <h3>Pelo WhatsApp</h3>
-        <p>O caminho mais rápido. Você manda a dúvida, a gente responde <strong>ainda hoje</strong> e,
+        <p>O caminho mais rápido. Você manda a dúvida, a gente responde <strong>o mais breve possível</strong> e,
            se fizer sentido, já monta a simulação. Sem formulário e sem espera.</p>
         <a class="btn btn-wa" style="margin-top:22px" href="https://wa.me/554599999999?text=Ol%C3%A1!%20Quero%20falar%20sobre%20cons%C3%B3rcio." target="_blank" rel="noopener noreferrer">
           <svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Z"/></svg>
@@ -7810,8 +8011,8 @@ window.AstroTaxas = {
       TXB:25,          /* taxa mensal do banco */
       indice:'INCC',   /* crédito imobiliário é corrigido pelo INCC */
       ENT:0.20,        /* entrada que um financiamento imobiliário costuma pedir */
-      min:100000, max:2000000, passo:10000, padrao:300000,
-      atalhos:[[150000,'150 mil'],[300000,'300 mil'],[500000,'500 mil'],[800000,'800 mil'],[1000000,'1 mi']]
+      min:50000, max:2000000, passo:10000, padrao:300000,
+      atalhos:[[50000,'50 mil'],[150000,'150 mil'],[300000,'300 mil'],[500000,'500 mil'],[800000,'800 mil'],[1000000,'1 mi']]
     },
     carro: {
       nome:'Automóvel', bem:'veículo',
@@ -7829,7 +8030,7 @@ window.AstroTaxas = {
       /* teto em 2 milhões, não só carro popular: linha alta (Porsche,
          Ferrari, BMW) também fecha consórcio de automóvel e tem
          demanda real — limitar a 400 mil escondia esse público. */
-      min:30000, max:2000000, passo:10000, padrao:90000,
+      min:50000, max:2000000, passo:10000, padrao:90000,
       atalhos:[[50000,'50 mil'],[90000,'90 mil'],[250000,'250 mil'],[600000,'600 mil'],[2000000,'2 mi']]
     },
     /* CONFIRMADO PELO JOÃO (14/09/2026): taxa de administração de maquinário
@@ -7837,12 +8038,12 @@ window.AstroTaxas = {
        grupos é de 110 a 135 meses — o que dá um custo total diluído de ADM
        entre 10% e 15% da carta ao longo do contrato. Usando o meio das
        faixas: N 120 meses, ADM 12,5%. Confere: 12,5% / 120 meses = 0,104%
-       ao mês, dentro da faixa informada.
-       AINDA PROVISÓRIO (copiado do perfil "carro", sem confirmação): juros
-       de financiamento pra comparação (I), fundo de reserva, seguros, IOF
-       e entrada — o João só confirmou ADM e prazo até agora. */
+       ao mês, dentro da faixa informada. A comparação bancária fica oculta
+       nessa modalidade: juros, seguros, IOF e entrada dependem da linha
+       rural/industrial e ainda não foram confirmados para uso comercial. */
     maquinario: {
       nome:'Maquinário', bem:'maquinário',
+      comparacao:false,
       N:120,
       I:0.0175, ADM:0.125, FR:0.02, SEG:0.0004, MIP:0.00030, DFI:0,
       IOF:0.0338, TXB:25, indice:'IPCA', ENT:0.20,
@@ -8166,6 +8367,21 @@ document.addEventListener('DOMContentLoaded', function () {
       trilho.querySelectorAll('.leque-card.ativo').forEach(function(c){ c.classList.remove('ativo'); });
       if (!jaAtivo) card.classList.add('ativo');
     }, true);
+  })();
+
+  /* No celular, os dois primeiros casos aparecem de imediato e os demais
+     ficam sob um controle explicito, reduzindo a rolagem inicial. */
+  (function(){
+    var carrossel = document.getElementById('lequeCarrossel');
+    var botao = document.getElementById('lequeToggle');
+    if (!carrossel || !botao) return;
+    botao.addEventListener('click', function(){
+      var aberto = carrossel.classList.toggle('expandido');
+      botao.setAttribute('aria-expanded', String(aberto));
+      var texto = botao.querySelector('span');
+      if (texto) texto.textContent = aberto ? 'Mostrar menos' : 'Ver outras formas de usar';
+      if (!aberto) carrossel.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
   })();
 
   /* ======================================================================
@@ -8912,17 +9128,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
       /* o resultado que fica na cara: parcela primeiro, resto em volta */
       var p = window.AstroTaxas.def();
+      var semComparacao = p.comparacao === false;
+      var admNumero = p.ADM * 100;
+      var admTexto = (Number.isInteger(admNumero) ? admNumero.toFixed(0) : admNumero.toFixed(1)).replace('.', ',') + '%';
+      var alternaveisBanco = [
+        document.querySelector('.res-banco'),
+        document.querySelector('.calc-barras'),
+        document.querySelector('.calc-economia'),
+        document.querySelector('.simulador-emenda'),
+        document.querySelector('.regua'),
+        document.querySelector('.comp-lado.ruim'),
+        document.querySelector('.comp-rende'),
+        document.querySelector('.comp-corpo > .comp-aviso')
+      ];
+      alternaveisBanco.forEach(function(el){ if (el) el.hidden = semComparacao; });
+      var avisoComparacao = document.getElementById('calcComparacaoAviso');
+      if (avisoComparacao) avisoComparacao.hidden = !semComparacao;
+      var compLados = document.querySelector('.comp-lados');
+      if (compLados) compLados.classList.toggle('sem-comparacao', semComparacao);
+
       põe('resParcela', c.con.parcela);
       põe('resBanco',   c.fin.parcela);
       põe('resTotal',   c.con.total);
       var elPrazo = document.getElementById('resPrazo');
       if (elPrazo) elPrazo.textContent = p.N + ' meses';
-      /* A nota do grafico dizia "1% ao mes" e "18%" com o calculo rodando a
-         0,95% e 20%: numero na tela contradizendo o proprio simulador, numa
-         pagina que vende credito. Agora ela sai da MESMA fonte. */
-      var nP=document.querySelector('[data-nota-prazo]'); if(nP) nP.textContent=p.N;
-      var nJ=document.querySelector('[data-nota-juros]'); if(nJ) nJ.textContent=(p.I*100).toFixed(2).replace('.',',')+'%';
-      var nA=document.querySelector('[data-nota-adm]'); if(nA) nA.textContent=Math.round(p.ADM*100)+'%';
+      var nota = document.querySelector('.calc-nota');
+      if (nota) {
+        if (semComparacao) {
+          nota.innerHTML = 'Estimativa de consórcio para <span data-nota-prazo>' + p.N + '</span> meses, com taxa de administração de <span data-nota-adm>' + admTexto + '</span> diluída. Fundo de reserva e seguro variam conforme a administradora e o perfil. A comparação com crédito bancário será preparada com a linha rural ou industrial adequada ao seu caso.';
+        } else {
+          nota.innerHTML = 'Estimativa para <span data-nota-prazo>' + p.N + '</span> meses, com juros de <span data-nota-juros>' + (p.I*100).toFixed(2).replace('.',',') + '%</span> ao mês e taxa de administração de <span data-nota-adm>' + admTexto + '</span> diluída. Valores reais variam conforme a administradora, o grupo e o seu perfil. Cada participante pode deter no máximo 10% das cotas de um mesmo grupo — créditos maiores são montados com cotas em grupos diferentes.';
+        }
+      }
+      var introComposicao = document.querySelector('.comp-intro');
+      if (introComposicao && semComparacao) {
+        introComposicao.innerHTML = 'Parcela média nos ' + p.N + ' meses, com <strong class="marca">os componentes do consórcio abertos</strong>. A comparação bancária será feita depois de identificar a linha de crédito adequada ao maquinário.';
+      }
       var elInd = document.getElementById('resIndice');
       if (elInd) elInd.textContent = p.indice;
 
@@ -8995,7 +9236,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (intro) intro.innerHTML = 'Parcela média nos ' + d.N + ' meses, com <strong class="marca">todas as ' +
         'linhas abertas</strong> nos dois lados. Nenhuma taxa escondida, nem a nossa.';
       var eAdm = document.querySelector('#cAdm').closest('.comp-lin').querySelector('em');
-      if (eAdm) eAdm.textContent = Math.round(d.ADM * 100) + '%';
+      if (eAdm) {
+        var admModo = d.ADM * 100;
+        eAdm.textContent = (Number.isInteger(admModo) ? admModo.toFixed(0) : admModo.toFixed(1)).replace('.', ',') + '%';
+      }
       var eFr = document.querySelector('#cFundo').closest('.comp-lin').querySelector('em');
       if (eFr) eFr.textContent = Math.round(d.FR * 100) + '%';
       var eJ = document.querySelector('#fJuros').closest('.comp-lin').querySelector('em');
@@ -9022,6 +9266,45 @@ document.addEventListener('DOMContentLoaded', function () {
         if (dica) dica.classList.add('oculta');
         rastrear('InitiateCheckout', { valor: bt.dataset.v });
       });
+    });
+
+    /* Leva modalidade e faixa de credito para o formulario, sem pedir que o
+       visitante repita o que acabou de escolher no simulador. */
+    var calcParaForm = document.getElementById('calcParaForm');
+    if (calcParaForm) calcParaForm.addEventListener('click', function(e){
+      e.preventDefault();
+      var modo = window.AstroTaxas.modalidade;
+      var valorAtual = Number(sl.value);
+      var faixa = valorAtual <= 100000 ? '50-100' :
+                  valorAtual <= 200000 ? '100-200' :
+                  valorAtual <= 300000 ? '200-300' :
+                  valorAtual <= 600000 ? '300-600' :
+                  valorAtual <= 1000000 ? '600-1m' :
+                  valorAtual <= 2000000 ? '1m-2m' : '2m+';
+
+      function selecionar(alvo, valor){
+        var select = document.getElementById(alvo);
+        if (!select) return;
+        select.value = valor;
+        document.querySelectorAll('.escolha-cartao[data-alvo="' + alvo + '"]').forEach(function(b){
+          var ativo = b.dataset.valor === valor;
+          b.classList.toggle('sel', ativo);
+          b.setAttribute('aria-pressed', String(ativo));
+        });
+        select.dispatchEvent(new Event('change', { bubbles:true }));
+      }
+
+      selecionar('modalidade', modo);
+      selecionar('valor', faixa);
+      document.querySelectorAll('.form-step').forEach(function(s){ s.classList.remove('active'); });
+      var passo2 = document.getElementById('step-2');
+      if (passo2) {
+        passo2.classList.add('active');
+        var indicador = passo2.querySelector('.step-indicator');
+        if (indicador) indicador.textContent = 'Passo 2 de 3 · valores trazidos do simulador';
+      }
+      var formulario = document.getElementById('form-simulador');
+      if (formulario) formulario.scrollIntoView({ behavior:'smooth', block:'start' });
     });
     atualizar();
   })();
@@ -9788,6 +10071,32 @@ document.addEventListener('DOMContentLoaded', function () {
     zonas.forEach(function(z){ obs.observe(z); });
   })();
 
+  /* Uma unica acao fixa no celular. Antes do formulario ela leva ao
+     simulador; depois passa a abrir a conversa com contexto. */
+  (function(){
+    var barra = document.querySelector('.mobile-cta');
+    var formulario = document.getElementById('form-simulador');
+    if (!barra || !formulario) return;
+    var linkSimulador = '#calculadora';
+    var linkWhats = 'https://wa.me/554599999999?text=' + encodeURIComponent('Olá! Já vi a simulação no site e quero falar com a equipe da Astro.');
+    var estado = '';
+    function atualizarBarra(){
+      if (window.innerWidth > 720) return;
+      var atendimento = formulario.getBoundingClientRect().top < window.innerHeight * .72;
+      var novo = atendimento ? 'whatsapp' : 'simulador';
+      if (novo === estado) return;
+      estado = novo;
+      barra.textContent = atendimento ? 'Falar no WhatsApp' : 'Simular meu crédito';
+      barra.href = atendimento ? linkWhats : linkSimulador;
+      barra.target = atendimento ? '_blank' : '';
+      barra.rel = atendimento ? 'noopener noreferrer' : '';
+      barra.setAttribute('aria-label', atendimento ? 'Falar com a Astro pelo WhatsApp' : 'Ir para o simulador de crédito');
+    }
+    window.addEventListener('scroll', atualizarBarra, { passive:true });
+    window.addEventListener('resize', atualizarBarra);
+    atualizarBarra();
+  })();
+
   /* O fluxo agora corre na página inteira, então NÃO pode mais ser desligado
      quando o hero sai da tela: isso congelava o fundo do resto do site.
      A economia real já vem do visibilitychange, que para o motor com a aba
@@ -10103,7 +10412,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (/whatsapp/i.test(resposta)) botaoWhatsApp();
       } catch (e) {
         pensando.remove();
-        fala('Não consegui responder agora. Fale com a gente no WhatsApp que respondemos no mesmo dia.', 'ia');
+        fala('Não consegui responder agora. Fale com a gente no WhatsApp e responderemos o mais breve possível.', 'ia');
         botaoWhatsApp();
       } finally {
         ocupado = false;
