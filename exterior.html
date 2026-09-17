@@ -98,9 +98,10 @@ fbq('track', 'PageView');
 /* Antes de qualquer pintura: sem isto a pagina nasce escura e pisca para o
    claro assim que o script principal roda. Fica inline de proposito. */
 (function(){try{
-  var t=localStorage.getItem("astro-tema");
-  if(t==="claro"||t==="escuro") document.documentElement.setAttribute("data-tema",t);
-  var claro = t==="claro" || (t!=="escuro" && window.matchMedia("(prefers-color-scheme: light)").matches);
+  var t=localStorage.getItem("astro-tema-v2");
+  if(t!=="claro"&&t!=="escuro") t="escuro";
+  document.documentElement.setAttribute("data-tema",t);
+  var claro = t==="claro";
   document.documentElement.classList.toggle("t-claro", claro);
   document.documentElement.style.colorScheme = claro ? "light" : "dark";
 }catch(e){}})();
@@ -4093,6 +4094,15 @@ html.consent-aberto .mobile-cta:not(.recolhido){
   display:inline-block; padding:4px 2px; min-height:24px; line-height:16px;
 }
 </style>
+<link rel="stylesheet" href="/busca-global.css">
+<style>
+html{scroll-padding-top:108px}
+section[id]{scroll-margin-top:108px}
+nav{z-index:300!important}
+.nav-painel{z-index:299!important;max-height:calc(100dvh - 72px)!important;overflow-y:auto!important;overscroll-behavior:contain}
+@media(max-width:1024px){nav .nav-inner{display:grid!important;grid-template-columns:auto 1fr auto!important}.nav-acao{display:flex!important;grid-column:2!important;justify-self:end!important}.nav-acao .nav-cta{display:none!important}.nav-burger{grid-column:3!important}.nav-logo{grid-column:1!important}}
+</style>
+<link rel="stylesheet" href="/mobile-compat.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -4126,8 +4136,12 @@ html.consent-aberto .mobile-cta:not(.recolhido){
         <li><a href="/exterior.html" aria-current="page" class="ativo">Brasileiros no Exterior</a></li>
         <li><a href="/#duvidas">Dúvidas</a></li>
         <li><a href="/#onde-estamos">Atendimento</a></li>
-      </ul>
+    </ul>
     <div class="nav-acao">
+      <div class="busca-global" data-busca-global>
+        <button class="busca-global-btn" type="button" aria-label="Buscar no site" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.9"/><path d="m20.5 20.5-4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+        <div class="busca-global-painel" role="search" hidden><div class="busca-global-campo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.9"/><path d="m20.5 20.5-4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><input type="search" placeholder="Buscar no site" aria-label="Buscar no site" autocomplete="off"></div><ul class="busca-global-resultados"></ul><p class="busca-global-vazio" hidden>Nenhum resultado encontrado.</p></div>
+      </div>
       <button class="tema-btn" type="button" aria-label="Mudar para o modo claro" aria-pressed="false"><svg class="sol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.6v2.2M12 19.2v2.2M21.4 12h-2.2M4.8 12H2.6M18.6 5.4l-1.6 1.6M7 17l-1.6 1.6M18.6 18.6L17 17M7 7 5.4 5.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><svg class="lua" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a8.6 8.6 0 1 0 10.7 10.7Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></button>
       <a href="/#form-simulador" class="nav-cta">Planejar minha conquista</a>
     </div>
@@ -4143,9 +4157,9 @@ html.consent-aberto .mobile-cta:not(.recolhido){
      vira bloco de contencao e prende qualquer position:fixed dentro dele -->
 <div class="nav-painel" id="navPainel" role="dialog" aria-modal="true" aria-label="Menu de navegação">
     <ul>
+      <li><a href="/">Página inicial</a></li>
       <li><a href="/#verdade">Como Funciona</a></li>
       <li><a href="/#estruturas">Modalidades</a></li>
-      <li></li>
       
       
       <li><a href="/#video">Vídeo</a></li>
@@ -4695,7 +4709,10 @@ document.addEventListener("DOMContentLoaded", function() {
     function alternar(){
       /* a pessoa clicou: a partir daqui a escolha dela manda, nao o sistema */
       var claro = claroAgora();
-      try { localStorage.setItem('astro-tema', claro ? 'escuro' : 'claro'); } catch(e){}
+      try {
+        localStorage.setItem('astro-tema', claro ? 'escuro' : 'claro');
+        localStorage.setItem('astro-tema-v2', claro ? 'escuro' : 'claro');
+      } catch(e){}
       raiz.setAttribute('data-tema', claro ? 'escuro' : 'claro');
       aplicar();
     }
@@ -4769,5 +4786,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 })();
 </script>
+<script src="/busca-global.js" defer></script>
 </body>
 </html>
