@@ -18,6 +18,23 @@
   .nav-painel{max-height:calc(100dvh - 104px)!important;overflow-y:auto!important}
 }
 
+/* O painel fica acima do conteúdo, mas o conteúdo não pode competir com os
+   links através do vidro. O véu também cobre as páginas internas, que não
+   possuíam a camada usada pela home. */
+body.menu-aberto::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:298!important;
+  pointer-events:none;
+  background:rgba(2,5,12,.68)!important;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+
+body.menu-aberto nav{z-index:300!important}
+body.menu-aberto .nav-painel{z-index:299!important}
+
 /* Tablets não precisam do filtro de 26–30px do desktop. Esta faixa preserva
    a leitura de vidro e reduz sensivelmente a área recomposta pela GPU. */
 @media (min-width:761px) and (max-width:1100px){
@@ -67,7 +84,7 @@
     box-shadow:0 12px 34px rgba(1,6,17,.24),inset 0 1px 0 rgba(255,255,255,.86)!important;
   }
   :root[data-tema="escuro"] .nav-painel{
-    background:linear-gradient(155deg,rgba(250,252,255,.91),rgba(224,234,247,.84))!important;
+    background:linear-gradient(155deg,rgba(250,252,255,.98),rgba(224,234,247,.95))!important;
     border-color:rgba(255,255,255,.72)!important;
     box-shadow:0 24px 64px rgba(1,6,17,.34),inset 0 1px 0 rgba(255,255,255,.9)!important;
   }
@@ -115,7 +132,7 @@
     box-shadow:0 12px 34px rgba(1,6,17,.26),inset 0 1px 0 rgba(255,255,255,.12)!important;
   }
   :root[data-tema="claro"] .nav-painel{
-    background:linear-gradient(155deg,rgba(10,27,58,.92),rgba(5,14,32,.86))!important;
+    background:linear-gradient(155deg,rgba(10,27,58,.98),rgba(5,14,32,.95))!important;
     border-color:rgba(147,169,201,.28)!important;
     box-shadow:0 24px 64px rgba(1,6,17,.44),inset 0 1px 0 rgba(255,255,255,.12)!important;
   }
