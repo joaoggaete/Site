@@ -112,9 +112,10 @@ fbq('track', 'PageView');
 /* Antes de qualquer pintura: sem isto a pagina nasce escura e pisca para o
    claro assim que o script principal roda. Fica inline de proposito. */
 (function(){try{
-  var t=localStorage.getItem("astro-tema");
-  if(t==="claro"||t==="escuro") document.documentElement.setAttribute("data-tema",t);
-  var claro = t==="claro" || (t!=="escuro" && window.matchMedia("(prefers-color-scheme: light)").matches);
+  var t=localStorage.getItem("astro-tema-v2");
+  if(t!=="claro"&&t!=="escuro") t="escuro";
+  document.documentElement.setAttribute("data-tema",t);
+  var claro = t==="claro";
   document.documentElement.classList.toggle("t-claro", claro);
   document.documentElement.style.colorScheme = claro ? "light" : "dark";
 }catch(e){}})();
@@ -1458,6 +1459,34 @@ input[type=range]::-moz-range-thumb{
   background:linear-gradient(135deg, var(--accent-hi), var(--accent));
   border-color:transparent; color:#04101F;
 }
+.calc-prazo{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid rgba(147,169,201,.2);
+}
+.calc-prazo-cab{
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  margin-bottom:10px;
+}
+.calc-prazo-cab span{
+  color:var(--muted); font-size:.76rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+}
+.calc-prazo-cab small{ color:var(--muted); font-size:.78rem }
+.calc-prazo-opcoes{ display:flex; flex-wrap:wrap; gap:8px }
+.calc-prazo-opcoes button{
+  min-width:64px; padding:9px 12px; border-radius:999px;
+  border:1px solid rgba(147,169,201,.42); background:rgba(255,255,255,.04);
+  color:var(--muted); font-family:inherit; font-size:.82rem; font-weight:700; line-height:1; cursor:pointer;
+  transition:border-color .2s,background .2s,color .2s,transform .2s;
+}
+.calc-prazo-opcoes button:hover{ transform:translateY(-1px); color:var(--text); border-color:var(--accent-line) }
+.calc-prazo-opcoes button.ativo{ color:#fff; background:var(--accent); border-color:var(--accent) }
+.calc-resumo-form{
+  margin:0 0 18px; padding:11px 14px; border-radius:12px;
+  border:1px solid rgba(59,143,224,.28); background:rgba(59,143,224,.08);
+  color:var(--muted); font-size:.88rem; line-height:1.45;
+}
+.calc-resumo-form strong{ color:var(--text) }
 
 /* as duas barras: o esqueleto que NÃO se repete a régua do hero */
 .calc-barras{ margin-top:16px; display:flex; flex-direction:column; gap:14px }
@@ -6551,7 +6580,16 @@ nav{z-index:300!important}
   background:rgba(127,212,255,.08); border:1px solid var(--accent-line);
   font-size:14px; line-height:1.55;
 }
-.calc-comparacao-aviso[hidden]{display:none}
+.calc-comparacao-aviso[hidden],
+.res-banco[hidden],
+.calc-barras[hidden],
+.calc-economia[hidden],
+.simulador-emenda[hidden],
+.regua[hidden],
+.comp-lado[hidden],
+.comp-rende[hidden],
+.comp-aviso[hidden]{display:none!important}
+.calc-resultado.sem-comparacao .res-grade{grid-template-columns:repeat(3,minmax(0,1fr))}
 .calc-comparacao-aviso strong{color:var(--text)}
 .comp-lados.sem-comparacao{grid-template-columns:minmax(0,1fr)}
 
@@ -6598,6 +6636,7 @@ nav{z-index:300!important}
   .diferencial-grid,.confianca-faixa{grid-template-columns:1fr}
 }
 </style>
+<link rel="stylesheet" href="/mobile-compat.css">
 </head>
 <body>
 
@@ -7025,8 +7064,8 @@ nav{z-index:300!important}
   <div class="container">
     <div class="sec-head centro rv">
       <div class="eyebrow">Simulador</div>
-      <h2 class="section-title">Mova o valor e veja <span>os 120 meses mudarem</span></h2>
-      <p class="section-sub centro">O gráfico abaixo é o mesmo cálculo, mês a mês. <span class="marca">Ele reage enquanto você arrasta</span>.</p>
+      <h2 class="section-title">Escolha valor e prazo e veja <span>a simulação mudar</span></h2>
+      <p class="section-sub centro">Parcela, custo total e gráfico usam as mesmas escolhas. <span class="marca">Tudo se atualiza na hora</span>.</p>
     </div>
 
     <div class="simulador vidro rv">
@@ -7051,6 +7090,13 @@ nav{z-index:300!important}
           <button type="button" data-v="800000">800 mil</button>
           <button type="button" data-v="1000000">1 mi</button>
         </div>
+        <div class="calc-prazo">
+          <div class="calc-prazo-cab">
+            <span>Prazo da simulação</span>
+            <small>Escolha para recalcular tudo</small>
+          </div>
+          <div class="calc-prazo-opcoes" id="calcPrazoOpcoes" role="group" aria-label="Prazo da simulação"></div>
+        </div>
         </div>
 
         <div class="calc-resultado" id="calcResultado">
@@ -7062,7 +7108,7 @@ nav{z-index:300!important}
             </div>
           </div>
           <div class="res-grade">
-            <div class="res-item"><span>Parcelas</span><b id="resPrazo">120 meses</b></div>
+            <div class="res-item"><span>Parcelas</span><b id="resPrazo">Prazo selecionado</b></div>
             <div class="res-item"><span>Custo total</span><b id="resTotal">R$ 375.075</b></div>
             <div class="res-item"><span>Reajuste anual</span><b id="resIndice">INCC</b></div>
             <div class="res-item res-banco"><span>No banco seria</span><b id="resBanco">R$ 4.318</b></div>
@@ -7093,7 +7139,7 @@ nav{z-index:300!important}
             <span class="comp-sinal" aria-hidden="true"></span>
           </button>
           <div class="comp-corpo" id="compCorpo" hidden>
-            <p class="comp-intro">Parcela média nos 120 meses, com <strong class="marca">todas as linhas
+            <p class="comp-intro">Parcela média no prazo escolhido, com <strong class="marca">todas as linhas
               abertas</strong> nos dois lados. Nenhuma taxa escondida, nem a nossa.</p>
 
             <div class="comp-lados">
@@ -7122,7 +7168,7 @@ nav{z-index:300!important}
               <p>Um financiamento pediria <strong id="rEntrada">R$ 60.000</strong> de entrada.
                 O consórcio não pede. Aplicado a 100% do CDI e já descontado o imposto de renda,
                 esse valor chegaria a <strong id="rFinal">R$ 196.180</strong> em
-                <span id="rPrazo">120 meses</span>.</p>
+                <span id="rPrazo">prazo escolhido</span>.</p>
               <p class="comp-rende-ganho">Só de rendimento: <strong id="rGanho">R$ 136.180</strong></p>
               <p class="comp-aviso"><strong>Projeção pela taxa de hoje</strong>, com o CDI a 13,90% ao
                 ano e a Selic a 14,00%. Juro muda, e ninguém garante que essa taxa se mantenha por
@@ -7151,7 +7197,7 @@ nav{z-index:300!important}
         <div class="regua" id="regua">
           <div class="regua-topo">
             <div class="regua-titulo">
-              <div class="regua-mes" id="reguaMes">Mês 120 de 120</div>
+              <div class="regua-mes" id="reguaMes">Prazo selecionado</div>
               </div>
             <div class="regua-legenda">
               <span class="regua-chave fin">Financiamento <b id="reguaFin">R$ 516.495</b></span>
@@ -7160,7 +7206,7 @@ nav{z-index:300!important}
           </div>
   
           <svg class="regua-svg" id="reguaSvg" viewBox="0 0 1000 115" role="img"
-               aria-label="Gráfico: ao longo de 120 meses o financiamento acumula R$ 516.495 e o consórcio R$ 354.000, uma diferença de R$ 162.495 em juros.">
+               aria-label="Gráfico comparativo conforme valor e prazo selecionados.">
             <defs>
               <linearGradient id="gradCunha" x1="0" y1="1" x2="1" y2="0">
                 <stop offset="0%"   stop-color="#A8763A" stop-opacity="0"/>
@@ -7183,7 +7229,7 @@ nav{z-index:300!important}
           </svg>
         </div>
 
-      <p class="calc-nota">Estimativa para <span data-nota-prazo>120</span> meses, com juros de <span data-nota-juros>0,95%</span> ao mês e taxa de administração de <span data-nota-adm>20%</span> diluída. Valores reais variam conforme a administradora, o grupo e o seu perfil. Cada participante pode deter no máximo 10% das cotas de um mesmo grupo — créditos maiores são montados com cotas em grupos diferentes.</p>
+      <p class="calc-nota">Estimativa conforme a modalidade, o valor e o prazo selecionados. Valores reais variam conforme a administradora, o grupo e o seu perfil.</p>
 
     </div>
   </div>
@@ -7261,6 +7307,7 @@ nav{z-index:300!important}
               <!-- PASSO 2 -->
               <div class="form-step" id="step-2">
                 <div class="step-indicator">Passo 2 de 3 · quase lá</div>
+                <p class="calc-resumo-form" id="calcResumoForm" hidden></p>
 
                 <label class="so-leitor" for="valor">Crédito estimado</label>
                 <select id="valor" class="so-leitor" required tabindex="-1" aria-hidden="true">
@@ -7996,11 +8043,13 @@ nav{z-index:300!important}
    ========================================================================== */
 window.AstroTaxas = {
   modalidade: 'imovel',
+  prazo: 120,
 
   perfis: {
     imovel: {
       nome:'Imóvel', bem:'imóvel',
       N:120,           /* prazo de referência, em meses */
+      prazos:[60,80,100,120,140,180,240],
       I:0.0095,        /* juros do SBPE ao mês, faixa 10,5% a 12% ao ano + TR */
       ADM:0.20,        /* taxa de administração, faixa 18% a 22% */
       FR:0.02,         /* fundo de reserva, faixa 1% a 3% */
@@ -8017,6 +8066,7 @@ window.AstroTaxas = {
     carro: {
       nome:'Automóvel', bem:'veículo',
       N:60,
+      prazos:[60,80,100,120,140],
       I:0.0175,        /* CDC de veículo, ordem de grandeza de 2026 */
       ADM:0.16,        /* veículo costuma ficar abaixo de imóvel */
       FR:0.02,
@@ -8045,6 +8095,7 @@ window.AstroTaxas = {
       nome:'Maquinário', bem:'maquinário',
       comparacao:false,
       N:120,
+      prazos:[60,80,100,120,140],
       I:0.0175, ADM:0.125, FR:0.02, SEG:0.0004, MIP:0.00030, DFI:0,
       IOF:0.0338, TXB:25, indice:'IPCA', ENT:0.20,
       /* teto em 3 milhões: maquinário agrícola (colheitadeira, trator
@@ -8074,7 +8125,11 @@ window.AstroTaxas = {
     return { entrada: entrada, liquido: liquido, ganho: liquido - entrada };
   },
 
-  def: function(){ return this.perfis[this.modalidade]; },
+  def: function(){
+    var base = this.perfis[this.modalidade];
+    var prazo = base.prazos.indexOf(this.prazo) > -1 ? this.prazo : base.N;
+    return Object.assign({}, base, { N:prazo });
+  },
 
   /* Mês a mês: seguro, MIP e DFI incidem sobre saldo que muda, e o
      financiamento amortiza em Price. Aproximar erraria onde importa. */
@@ -8163,6 +8218,12 @@ document.addEventListener('click', function(e){
   });
   btn.classList.add('sel'); btn.setAttribute('aria-pressed', 'true');
   alvo.value = btn.getAttribute('data-valor');
+  if (alvo.id === 'modalidade' || alvo.id === 'valor') {
+    var quiz = document.getElementById('quiz-form');
+    var resumo = document.getElementById('calcResumoForm');
+    if (quiz) quiz.dataset.valorExato = '';
+    if (resumo) resumo.hidden = true;
+  }
   alvo.dispatchEvent(new Event('change', { bubbles: true }));
 });
 
@@ -8176,17 +8237,20 @@ function enviarWhats() {
   function val(id){ var e = document.getElementById(id); return e ? e.value : ''; }
   var nome = val('f-nome'), fone = val('f-fone'), modal = val('modalidade'),
       valor = val('valor'), prazo = val('prazo'), lance = val('lance');
+  var quiz = document.getElementById('quiz-form');
+  var valorExato = quiz ? (quiz.dataset.valorExato || '') : '';
+  var valorEnvio = valorExato || valor;
 
   var texto =
     'Olá! Quero uma simulação da Astro.' +
     '\n\nNome: ' + nome +
     '\nWhatsApp: ' + fone +
     (modal ? '\nModalidade: ' + modal : '') +
-    (valor ? '\nValor do crédito: ' + valor : '') +
+    (valorEnvio ? '\nValor do crédito: ' + valorEnvio : '') +
     (prazo ? '\nPrazo: ' + prazo : '') +
     (lance ? '\nReserva para lance: ' + lance : '');
 
-  rastrear('Lead', { valor_credito: valor, modalidade: modal });
+  rastrear('Lead', { valor_credito: valorEnvio, modalidade: modal, prazo: prazo });
   window.open('https://wa.me/554599999999?text=' + encodeURIComponent(texto), '_blank');
   changeStep(3, 4);
 }
@@ -9110,6 +9174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         bFin = document.getElementById('calcBarFin'),
         bCon = document.getElementById('calcBarCon'),
         dica = document.getElementById('calcDica'),
+        prazoOpcoes = document.getElementById('calcPrazoOpcoes'),
         atalhos = document.querySelectorAll('.calc-atalhos button');   /* reatribuído ao trocar de modalidade */
     /* as taxas vêm de window.AstroTaxas, fonte única do site */
     var compor = function(pv){ return window.AstroTaxas.compor(pv); };
@@ -9146,6 +9211,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (avisoComparacao) avisoComparacao.hidden = !semComparacao;
       var compLados = document.querySelector('.comp-lados');
       if (compLados) compLados.classList.toggle('sem-comparacao', semComparacao);
+      var resultado = document.getElementById('calcResultado');
+      if (resultado) resultado.classList.toggle('sem-comparacao', semComparacao);
 
       põe('resParcela', c.con.parcela);
       põe('resBanco',   c.fin.parcela);
@@ -9161,11 +9228,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
       var introComposicao = document.querySelector('.comp-intro');
-      if (introComposicao && semComparacao) {
-        introComposicao.innerHTML = 'Parcela média nos ' + p.N + ' meses, com <strong class="marca">os componentes do consórcio abertos</strong>. A comparação bancária será feita depois de identificar a linha de crédito adequada ao maquinário.';
+      if (introComposicao) {
+        introComposicao.innerHTML = semComparacao
+          ? 'Parcela média em ' + p.N + ' meses, com <strong class="marca">os componentes do consórcio abertos</strong>. A comparação bancária será feita depois de identificar a linha de crédito adequada ao maquinário.'
+          : 'Parcela média em ' + p.N + ' meses, com <strong class="marca">todas as linhas abertas</strong> nos dois lados. Nenhuma taxa escondida, nem a nossa.';
       }
       var elInd = document.getElementById('resIndice');
       if (elInd) elInd.textContent = p.indice;
+      if (prazoOpcoes) prazoOpcoes.querySelectorAll('button').forEach(function(b){
+        var ativo = Number(b.dataset.prazo) === p.N;
+        b.classList.toggle('ativo', ativo);
+        b.setAttribute('aria-pressed', String(ativo));
+      });
 
       /* o dinheiro que não virou entrada */
       var r = window.AstroTaxas.rendimento(pv);
@@ -9179,6 +9253,9 @@ document.addEventListener('DOMContentLoaded', function () {
       eco.textContent = brl(totalFin - totalCon);
       bFin.style.width = '100%';
       bCon.style.width = ((totalCon / totalFin) * 100).toFixed(1) + '%';
+
+      var grafico = document.getElementById('reguaSvg');
+      if (grafico) grafico.setAttribute('aria-label', 'Gráfico da simulação em ' + p.N + ' meses: financiamento ' + brl(totalFin) + ' e consórcio ' + brl(totalCon) + '.');
 
       var pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
       sl.style.background = 'linear-gradient(90deg,#3B8FE0 0%,#7FD4FF ' + pct + '%,rgba(147,169,201,.16) ' + pct + '%,rgba(147,169,201,.16) 100%)';
@@ -9196,9 +9273,30 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!aberto) rastrear('ViewContent', { origem:'composicao-parcela' });
     });
 
-    /* o seletor reescreve a faixa do slider, os atalhos e o prazo */
+    /* Valor e prazo usam a mesma fonte de verdade do gráfico e do formulário. */
+    function montarPrazos(){
+      if (!prazoOpcoes) return;
+      var d = window.AstroTaxas.def();
+      prazoOpcoes.innerHTML = '';
+      d.prazos.forEach(function(n){
+        var b = document.createElement('button');
+        b.type = 'button'; b.dataset.prazo = n; b.textContent = n + ' meses';
+        b.setAttribute('aria-pressed', String(n === d.N));
+        b.classList.toggle('ativo', n === d.N);
+        b.addEventListener('click', function(){
+          window.AstroTaxas.prazo = n;
+          Regua.remedir(1);
+          atualizar();
+          rastrear('ViewContent', { modalidade:window.AstroTaxas.modalidade, prazo:n });
+        });
+        prazoOpcoes.appendChild(b);
+      });
+    }
+
+    /* O seletor reescreve a faixa do slider, os atalhos e os prazos disponíveis. */
     function trocarModo(modo){
       window.AstroTaxas.modalidade = modo;
+      window.AstroTaxas.prazo = window.AstroTaxas.perfis[modo].N;
       var d = window.AstroTaxas.def();
       sl.min = d.min; sl.max = d.max; sl.step = d.passo; sl.value = d.padrao;
 
@@ -9248,10 +9346,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (linBanco) linBanco.firstChild.nodeValue = d.IOF ? 'Taxa do banco e IOF' : 'Taxa mensal do banco';
       var linSeg = document.querySelector('#fSeg').closest('.comp-lin').querySelector('span');
       if (linSeg) linSeg.firstChild.nodeValue = d.DFI ? 'Seguro MIP + DFI' : 'Seguro prestamista';
-      var tit = document.querySelector('#calculadora .section-title');
-      if (tit) tit.innerHTML = 'Mova o valor e veja <span>os ' + d.N + ' meses mudarem</span>';
-
-      Regua.remedir();
+      montarPrazos();
+      Regua.remedir(1);
       atualizar();
       rastrear('ViewContent', { modalidade: modo });
     }
@@ -9296,16 +9392,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
       selecionar('modalidade', modo);
       selecionar('valor', faixa);
+      selecionar('prazo', window.AstroTaxas.def().N + ' Meses');
+      var quiz = document.getElementById('quiz-form');
+      if (quiz) quiz.dataset.valorExato = brl(valorAtual);
+      var resumo = document.getElementById('calcResumoForm');
+      if (resumo) {
+        resumo.innerHTML = 'Valores trazidos da calculadora: <strong>' + brl(valorAtual) + '</strong> em <strong>' + window.AstroTaxas.def().N + ' meses</strong>.';
+        resumo.hidden = false;
+      }
       document.querySelectorAll('.form-step').forEach(function(s){ s.classList.remove('active'); });
       var passo2 = document.getElementById('step-2');
       if (passo2) {
         passo2.classList.add('active');
         var indicador = passo2.querySelector('.step-indicator');
-        if (indicador) indicador.textContent = 'Passo 2 de 3 · valores trazidos do simulador';
+        if (indicador) indicador.textContent = 'Passo 2 de 3 · modalidade, valor e prazo já preenchidos';
       }
       var formulario = document.getElementById('form-simulador');
       if (formulario) formulario.scrollIntoView({ behavior:'smooth', block:'start' });
     });
+    montarPrazos();
     atualizar();
   })();
 
@@ -10259,7 +10364,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function alternar(){
       /* a pessoa clicou: a partir daqui a escolha dela manda, nao o sistema */
       var claro = claroAgora();
-      try { localStorage.setItem('astro-tema', claro ? 'escuro' : 'claro'); } catch(e){}
+      try {
+        localStorage.setItem('astro-tema', claro ? 'escuro' : 'claro');
+        localStorage.setItem('astro-tema-v2', claro ? 'escuro' : 'claro');
+      } catch(e){}
       raiz.setAttribute('data-tema', claro ? 'escuro' : 'claro');
       aplicar();
     }

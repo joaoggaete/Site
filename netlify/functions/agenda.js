@@ -8,7 +8,12 @@
      {edgeURL}/{siteID}/{store}/{chave}   com  authorization: Bearer {token}
    ========================================================================= */
 
-const LOJA = 'astro-agenda';
+/* O cliente oficial @netlify/blobs transforma todo armazenamento permanente
+   em `site:<nome>` antes de chamar a API. Como esta função fala com a API
+   diretamente, precisamos aplicar o mesmo prefixo aqui. Sem ele, a API recebe
+   um namespace inválido e pode responder 401 mesmo com token e Project ID
+   corretos. */
+const LOJA = 'site:astro-agenda';
 const CHAVE_CONFIG = 'config';
 const ZONA = 'America/Sao_Paulo';   /* o Brasil não tem horário de verão desde
                                        2019, então -03:00 é estável o ano todo */
